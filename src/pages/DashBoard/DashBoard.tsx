@@ -16,6 +16,8 @@ const DashboardPage = ({ projects }: Props) => {
             project={project} 
           />
         ))}
+        <button>+</button>
+        {/*TODO: логика создания нового проекта. По умолчанию планируется 2 колонки: Сделано и Сделать*/}
       </div>
     </div>
   );

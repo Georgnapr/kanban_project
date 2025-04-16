@@ -13,7 +13,9 @@ function Column({column}: Props) {
       {column.tasks.map((task) => (
         <TaskCard taskcard={task}></TaskCard>
       ))}
-      
+      <button>+</button>
+      {/*TODO: логика создания новой задачи*/}
+      {/*TODO: drag-n-drop для задач (между колонками, внутри колонки)*/}
     </div>
   )
 }

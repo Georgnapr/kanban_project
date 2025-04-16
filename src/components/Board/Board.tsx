@@ -14,6 +14,8 @@ function Board({project}: Props) {
                 <Column column={column}></Column>
             ))}
             <button>+</button>
+            {/*TODO: логика создания новой колонки*/}
+            {/*TODO: drag-n-drop для перемещения колонок*/}
         </div>
         <p></p>
     </>
