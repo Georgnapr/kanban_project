@@ -1,16 +1,16 @@
-import { Link } from "react-router-dom";
-import { Project } from "../types/entities";
 import './ProjectCard.css'
+import { Link } from "react-router-dom";
+import { IProject } from "../types/entities";
 
 type Props = {
-    project: Project
+    project: IProject
 }
 
 const ProjectCard = ({ project }: Props) => {
     return (
       <div className="project-card">
         <h3>{project.title}</h3>
-        
+
         <Link 
           to={`/projects/${project.id}`} 
           className="project-button"

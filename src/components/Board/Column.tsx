@@ -1,8 +1,18 @@
-import React from 'react'
+import './Column.css'
+import { IColumn } from '../../types/entities'
+import TaskCard from './TaskCard'
 
-function Column() {
+type Props = {
+    column: IColumn
+}
+
+function Column({column}: Props) {
   return (
-    <div>
+    <div className='column'>
+      <h3>{column.title}</h3>
+      {column.tasks.map((task) => (
+        <TaskCard taskcard={task}></TaskCard>
+      ))}
       
     </div>
   )

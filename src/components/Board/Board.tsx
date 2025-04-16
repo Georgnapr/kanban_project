@@ -1,11 +1,23 @@
-import React from 'react'
+import './Board.css'
+import Column from './Column'
+import { IProject } from "../../types/entities";
 
-function Board() {
+type Props = {
+    project: IProject
+}
+
+function Board({project}: Props) {
   return (
-    <div>
-       <p>Здесь будет доска задач проекта...</p>
-       <p>...И что нибудь ещё</p>
-    </div>
+    <>
+        <div className='columns-container'>
+            {project.columns.map((column) =>(
+                <Column column={column}></Column>
+            ))}
+            <button>+</button>
+        </div>
+        <p></p>
+    </>
+    
   )
 }
 

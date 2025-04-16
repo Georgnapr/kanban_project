@@ -1,0 +1,11 @@
+.task-card{
+    text-align: center;
+    width: 80%;
+    background-color: rgb(216, 237, 255);
+    height: fit-content;
+    margin: 5px;
+    border-radius: 10px;
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+}

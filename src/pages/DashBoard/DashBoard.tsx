@@ -1,8 +1,8 @@
 import ProjectCard from '../../components/ProjectCard';
-import { Project } from '../../types/entities';
-
+import { IProject } from '../../types/entities';
+import "./DashBoard.css"
 interface Props {
-  projects: Project[];
+  projects: IProject[];
 }
 
 const DashboardPage = ({ projects }: Props) => {

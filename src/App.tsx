@@ -3,25 +3,54 @@ import DashBoard from './pages/DashBoard/DashBoard';
 import ProjectPage from './pages/ProjectPage';
 import './App.css';
 import { useState } from 'react';
-import { Project } from './types/entities';
+import { IProject } from './types/entities';
 
 
 function App() {
   
-  const [projects] = useState<Project[]>([ // Явная типизация
+  const [projects] = useState<IProject[]>([ // Явная типизация
     {
       id: '1',
       title: 'Разработка сайта',
       columns: [
-        { id: '1', title: 'Дизайн главной'},
-        { id: '2', title: 'Верстка'}
+        { id: '1', 
+          title: 'Дизайн главной', 
+          tasks: [
+          ]},
+        { id: '2', 
+          title: 'Верстка', 
+          tasks: [
+            {
+              id: '1',
+              title: 'Верстка лендинга'
+            },
+            {
+              id: '2',
+              title: 'Верстка dashboard'
+            },
+            {
+              id: '3',
+              title: 'Верстка стр. регистрации'
+            },
+          ]}
       ]
     },
     {
       id: '2',
       title: 'Мобильное приложение',
       columns: [
-        { id: '1', title: 'Прототип'}
+        { id: '1', 
+          title: 'Прототип', 
+          tasks: [
+            {
+              id: '1',
+              title: 'Верстка лендинга моб.'
+            },
+            {
+              id: '2',
+              title: 'Верстка dashboard моб.'
+            },
+          ]}
       ]
     }
   ]);

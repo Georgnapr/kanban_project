@@ -1,19 +1,19 @@
 // Проект
-export interface Project {
+export interface IProject {
     id: string;
     title: string;
-    columns: Column[];
+    columns: IColumn[];
 }
   
 // Задача
-export interface Column {
+export interface IColumn {
     id: string;
     title: string;
-    tasks?: Task[];     // Задачи
+    tasks: ITask[];     // Задачи
 }
   
 // Задача
-export interface Task {
+export interface ITask {
     id: string;
     title: string;
     completed?: boolean;
