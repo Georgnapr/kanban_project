@@ -13,7 +13,9 @@ function Board({project}: Props) {
             {project.columns.map((column) =>(
                 <Column column={column}></Column>
             ))}
-            <button>+</button>
+            <div>
+                <button> + Добавить колонку </button>
+            </div>
             {/*TODO: логика создания новой колонки*/}
             {/*TODO: drag-n-drop для перемещения колонок*/}
         </div>
