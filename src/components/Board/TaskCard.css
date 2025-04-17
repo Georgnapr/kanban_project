@@ -1,11 +1,15 @@
 .task-card{
     text-align: center;
-    background-color: rgb(216, 237, 255);
-    width: 100%;
+    background-color: #8EBCFE;
+    width: 180px;
     height: fit-content;
-    margin: 5px;
+    font-size: 14px;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    padding-top: 10px;
     border-radius: 10px;
-    border-style: solid;
-    border-color: black;
-    border-width: 1px;
+}
+
+.task-card:hover {
+    outline: 1px solid white;
 }

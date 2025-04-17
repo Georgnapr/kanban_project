@@ -1,6 +1,8 @@
+import './ProjectPage.css'
 import { Link, useParams } from 'react-router-dom';
 import { IProject } from '../types/entities';
 import Board from '../components/Board/Board';
+import Button from '../components/UI/Button';
 
 interface Props {
   projects: IProject[];
@@ -16,19 +18,23 @@ const ProjectPage = ({projects} : Props) => {
       <>
         <div>Проект не найден</div>;
         <Link to="/">
-          <button type="button">Назад к списку проектов</button>
+          <Button>Назад к списку проектов</Button>
         </Link>
       </>);
   }
 
   return (
-    <div className="project-page">
-      <h2>{project.title}</h2>
-      <Board project={project}></Board>
-      <Link to="/">
-        <button type="button">Назад к списку проектов</button>
-      </Link>
-    </div>
+    <>
+      <div className="project-title-container">
+        <h2>{project.title}</h2>
+      </div>
+      <div className="project-page">
+        <Board project={project}></Board>
+        <Link to="/">
+          <Button>Назад к доскам</Button>
+        </Link>
+      </div>
+    </>
   );
 };
 

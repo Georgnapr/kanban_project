@@ -1,4 +1,5 @@
 import ProjectCard from '../../components/ProjectCard';
+import Button from '../../components/UI/Button';
 import { IProject } from '../../types/entities';
 import "./DashBoard.css"
 interface Props {
@@ -17,7 +18,7 @@ const DashboardPage = ({ projects }: Props) => {
           />
         ))}
         <div>
-          <button> + Создать доску </button>
+          <Button> + Создать доску </Button>
         </div>
         {/*TODO: логика создания нового проекта. По умолчанию планируется 2 колонки: Сделано и Сделать*/}
       </div>

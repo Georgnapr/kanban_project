@@ -1,19 +1,23 @@
 import './Column.css'
 import { IColumn } from '../../types/entities'
 import TaskCard from './TaskCard'
+import Button from '../UI/Button'
 
 type Props = {
     column: IColumn
 }
 
-function Column({column}: Props) {
+const Column = ({column}: Props) => {
   return (
     <div className='column'>
-      <h3>{column.title}</h3>
+      <div className='column-title-container'>
+        <span>{column.title}</span>
+      </div>
+
       {column.tasks.map((task) => (
         <TaskCard taskcard={task}></TaskCard>
       ))}
-      <button> + Добавить задачу </button>
+      <Button> +  Добавить задачу </Button>
       {/*TODO: логика создания новой задачи*/}
       {/*TODO: drag-n-drop для задач (между колонками, внутри колонки)*/}
     </div>

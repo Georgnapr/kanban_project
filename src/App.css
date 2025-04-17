@@ -10,5 +10,11 @@ body {
     flex-direction: column;
     align-items: center;
     height: 100px;
-    background-color: rgb(118, 192, 249);
+    color: white;
+    background-color: rgb(51, 51, 51);
+}
+
+.main-container {
+  margin-left: 50px;
+  padding-right: 50px;
 }

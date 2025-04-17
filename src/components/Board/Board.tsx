@@ -1,12 +1,13 @@
 import './Board.css'
 import Column from './Column'
 import { IProject } from "../../types/entities";
+import Button from '../UI/Button';
 
 type Props = {
     project: IProject
 }
 
-function Board({project}: Props) {
+const Board = ({project}: Props) => {
   return (
     <>
         <div className='columns-container'>
@@ -14,7 +15,7 @@ function Board({project}: Props) {
                 <Column column={column}></Column>
             ))}
             <div>
-                <button> + Добавить колонку </button>
+                <Button> + Добавить колонку </Button>
             </div>
             {/*TODO: логика создания новой колонки*/}
             {/*TODO: drag-n-drop для перемещения колонок*/}

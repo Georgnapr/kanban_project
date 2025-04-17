@@ -1,0 +1,13 @@
+.project-page {
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+.project-title-container {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-bottom: 20px;
+    background-color: #5795ED;
+    color: white;
+    padding-left: 50px;
+}

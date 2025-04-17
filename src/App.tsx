@@ -60,16 +60,15 @@ function App() {
       <header className='header'>
         <h1>Проект kanban-доски</h1>
       </header>
-      
       <Routes>
-        <Route 
-          path="/" 
-          element={<DashBoard projects={projects} />} 
-        />
-        <Route 
-          path="/projects/:projectId" 
-          element={<ProjectPage projects={projects}/>} 
-        />
+          <Route 
+            path="/" 
+            element={<DashBoard projects={projects} />} 
+          />
+          <Route 
+            path="/projects/:projectId" 
+            element={<ProjectPage projects={projects}/>} 
+          />
       </Routes>
     </Router>
   );

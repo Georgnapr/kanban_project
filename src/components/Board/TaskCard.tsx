@@ -5,10 +5,10 @@ type Props = {
     taskcard: ITask;
 }
 
-function TaskCard({taskcard}: Props) {
+const TaskCard = ({taskcard}: Props) => {
   return (
     <div className="task-card">
-        <h4>{taskcard.title}</h4>
+        <span>{taskcard.title}</span>
     </div>
   )
 }

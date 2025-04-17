@@ -1,6 +1,7 @@
 import './ProjectCard.css'
 import { Link } from "react-router-dom";
 import { IProject } from "../types/entities";
+import Button from './UI/Button';
 
 type Props = {
     project: IProject
@@ -11,11 +12,10 @@ const ProjectCard = ({ project }: Props) => {
       <div className="project-card">
         <h3>{project.title}</h3>
 
-        <Link 
-          to={`/projects/${project.id}`} 
-          className="project-button"
-        >
-          Открыть проект
+        <Link to={`/projects/${project.id}`}>
+          <Button>
+            Открыть проект
+          </Button>
         </Link>
       </div>
     );
