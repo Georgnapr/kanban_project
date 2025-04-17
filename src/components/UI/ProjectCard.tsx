@@ -1,7 +1,7 @@
 import './ProjectCard.css'
 import { Link } from "react-router-dom";
-import { IProject } from "../types/entities";
-import Button from './UI/Button';
+import { IProject } from '../../types/entities';
+import Button from './Button';
 
 type Props = {
     project: IProject

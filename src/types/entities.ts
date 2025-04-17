@@ -9,6 +9,7 @@ export interface IProject {
 export interface IColumn {
     id: string;
     title: string;
+    order?: number;
     tasks: ITask[];     // Задачи
 }
   
@@ -16,5 +17,6 @@ export interface IColumn {
 export interface ITask {
     id: string;
     title: string;
+    order?: number;
     completed?: boolean;
 }

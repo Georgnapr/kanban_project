@@ -1,4 +1,4 @@
-import ProjectCard from '../../components/ProjectCard';
+import ProjectCard from '../../components/UI/ProjectCard';
 import Button from '../../components/UI/Button';
 import { IProject } from '../../types/entities';
 import "./DashBoard.css"
