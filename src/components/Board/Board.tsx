@@ -11,8 +11,8 @@ const Board = ({project}: Props) => {
   return (
     <>
         <div className='columns-container'>
-            {project.columns.map((column) =>(
-                <Column column={column}></Column>
+            {project.columns.map((column, index) =>(
+                <Column column={column} key={index}></Column>
             ))}
             <div>
                 <Button> + Добавить колонку </Button>

@@ -1,8 +1,8 @@
 import './ProjectPage.css'
 import { Link, useParams } from 'react-router-dom';
-import { IProject } from '../types/entities';
-import Board from '../components/Board/Board';
-import Button from '../components/UI/Button';
+import { IProject } from '../../types/entities';
+import Board from '../../components/Board/Board';
+import Button from '../../components/UI/Button';
 
 interface Props {
   projects: IProject[];

@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import DashBoard from './pages/DashBoard/DashBoard';
-import ProjectPage from './pages/ProjectPage';
+import DashBoard from './pages/dashBoard/DashBoard';
+import ProjectPage from './pages/projectPage/ProjectPage';
 import './App.css';
 import { useState } from 'react';
 import { IProject } from './types/entities';

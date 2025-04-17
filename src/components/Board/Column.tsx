@@ -14,8 +14,8 @@ const Column = ({column}: Props) => {
         <span>{column.title}</span>
       </div>
 
-      {column.tasks.map((task) => (
-        <TaskCard taskcard={task}></TaskCard>
+      {column.tasks.map((task, index) => (
+        <TaskCard taskcard={task} key={index}></TaskCard>
       ))}
       <Button> +  Добавить задачу </Button>
       {/*TODO: логика создания новой задачи*/}
