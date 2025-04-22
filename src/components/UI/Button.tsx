@@ -10,7 +10,7 @@ const Button = ({
   ...props
   }: ButtonProps) => {
   return (
-    <button className="standart-button">
+    <button className="standart-button" {...props}>
       <span className="button-span">
         {children}
       </span>
