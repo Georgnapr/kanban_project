@@ -25,7 +25,7 @@ const ProjectPage = ({projects} : Props) => {
 
   return (
     <>
-      <div className="project-title-container">
+      <div className="action-bar">
         <h2>{project.title}</h2>
       </div>
       <div className="project-page">

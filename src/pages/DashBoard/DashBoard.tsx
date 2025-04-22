@@ -9,7 +9,9 @@ interface Props {
 const DashboardPage = ({ projects }: Props) => {
   return (
     <div className="dashboard">
-      <h2>Мои доски</h2>
+      <div className='action-bar'>
+        <h2>Мои доски</h2>
+      </div>
       <div className="projects-container">
         {projects.map(project => (
           <ProjectCard 
@@ -18,7 +20,7 @@ const DashboardPage = ({ projects }: Props) => {
           />
         ))}
         <div>
-          <Button> + Создать доску </Button>
+          <Button>Создать доску</Button>
         </div>
         {/*TODO: логика создания нового проекта. По умолчанию планируется 2 колонки: Сделано и Сделать*/}
       </div>

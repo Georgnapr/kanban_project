@@ -15,7 +15,7 @@ const Board = ({project}: Props) => {
                 <Column column={column} key={index}></Column>
             ))}
             <div>
-                <Button> + Добавить колонку </Button>
+                <Button>Добавить колонку</Button>
             </div>
             {/*TODO: логика создания новой колонки*/}
             {/*TODO: drag-n-drop для перемещения колонок*/}

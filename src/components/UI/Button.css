@@ -1,18 +1,33 @@
+@font-face {
+  font-family: 'Montserrat';
+  src: url('./assets/fonts/Montserrat-Regular.woff2') format('woff2');
+  font-weight: 400; /* Regular */
+  font-style: normal;
+}
+
+
 .standart-button {
-    width: 180px;
+    width: 230px;
     padding-top: 10px;
     padding-bottom: 10px;
-    background-color: #5795ED; /* синий цвет */
-    color: white; /* белый текст */
+    background-color: #D2E5FF; /* синий цвет */
+    color: #2F5487; /* белый текст */
     text-align: center; /* текст посередине */
     border-radius: 10px; /* скругление 10 */
     border: none; /* убираем стандартную рамку */
     cursor: pointer; /* курсор-указатель при наведении */
-    font-size: 14px; /* размер шрифта */
+
     transition: background-color 0.3s ease; /* плавное изменение цвета */
     margin-bottom: 10px;
   }
   
   .standart-button:hover {
-    background-color: #8EBCFE; /* светлеет при наведении */
+    background-color: white; /* светлеет при наведении */
+    outline: 1px solid #2F5487;
+  }
+
+  .button-span {
+    font-family: 'Montserrat';
+    font-size: 14px; /* размер шрифта */
+    font-weight: 400;
   }

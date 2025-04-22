@@ -4,6 +4,7 @@ import ProjectPage from './pages/projectPage/ProjectPage';
 import './App.css';
 import { useState } from 'react';
 import { IProject } from './types/entities';
+import Header from './components/UI/Header/Header';
 
 
 function App() {
@@ -57,9 +58,7 @@ function App() {
 
   return (
     <Router>
-      <header className='header'>
-        <h1>Проект kanban-доски</h1>
-      </header>
+      <Header></Header>
       <Routes>
           <Route 
             path="/" 

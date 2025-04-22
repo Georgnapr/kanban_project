@@ -4,16 +4,6 @@ body {
     width: 100%;
     min-height: 100vh; /* Чтобы body занимал всю высоту экрана */
   }
-
-.header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100px;
-    color: white;
-    background-color: rgb(51, 51, 51);
-}
-
 .main-container {
   margin-left: 50px;
   padding-right: 50px;

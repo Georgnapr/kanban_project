@@ -8,7 +8,11 @@ type Props = {
 const TaskCard = ({taskcard}: Props) => {
   return (
     <div className="task-card">
-        <span>{taskcard.title}</span>
+        <label className="round-checkbox">
+          <input type='checkbox'></input>
+          <span className="checkmark"></span>
+        </label>
+        <div className='taskcard-title'>{taskcard.title}</div>
     </div>
   )
 }
