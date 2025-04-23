@@ -13,7 +13,10 @@
 
 .column-title-container {
     background-color: #8EBCFE;
-    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    width: 240px;
+    padding-right: 10px;
     padding-top: 9px;
     padding-bottom: 9px;
     margin-bottom: 15px;

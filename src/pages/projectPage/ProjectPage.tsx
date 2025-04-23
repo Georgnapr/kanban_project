@@ -25,7 +25,7 @@ const ProjectPage = () => {
   return (
     <>
       <div className="action-bar">
-        <h2>{project.title}</h2>
+        <h2 className='action-bar-title'>{project.title}</h2>
       </div>
       <div className="project-page">
         <Board project={project} />

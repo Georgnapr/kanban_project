@@ -23,7 +23,7 @@ const DashboardPage = () => {
     <div className="dashboard">
       
       <div className='action-bar'>
-        <h2>Мои доски</h2>
+        <h2 className='action-bar-title'>Мои доски</h2>
       </div>
       {isModalOpen && (
         <InputModal

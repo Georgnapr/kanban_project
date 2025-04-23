@@ -160,6 +160,99 @@ const boardSlice = createSlice({
           }
         }
       },
+            // Изменение названия проекта
+      updateProjectTitle: (state, action: PayloadAction<{
+        projectId: string;
+        newTitle: string;
+      }>) => {
+        const { projectId, newTitle } = action.payload;
+        const project = state.projects.find(p => p.id === projectId);
+        if (project) {
+          project.title = newTitle;
+        }
+      },
+
+      // Изменение названия колонки
+      updateColumnTitle: (state, action: PayloadAction<{
+        projectId: string;
+        columnId: string;
+        newTitle: string;
+      }>) => {
+        const { projectId, columnId, newTitle } = action.payload;
+        const project = state.projects.find(p => p.id === projectId);
+        if (project) {
+          const column = project.columns.find(c => c.id === columnId);
+          if (column) {
+            column.title = newTitle;
+          }
+        }
+      },
+
+      // Изменение названия задачи
+      updateTaskTitle: (state, action: PayloadAction<{
+        projectId: string;
+        columnId: string;
+        taskId: string;
+        newTitle: string;
+      }>) => {
+        const { projectId, columnId, taskId, newTitle } = action.payload;
+        const project = state.projects.find(p => p.id === projectId);
+        if (project) {
+          const column = project.columns.find(c => c.id === columnId);
+          if (column) {
+            const task = column.tasks.find(t => t.id === taskId);
+            if (task) {
+              task.title = newTitle;
+            }
+          }
+        }
+      },
+      moveTask: (state, action: PayloadAction<{
+        sourceProjectId: string;
+        sourceColumnId: string;
+        sourceTaskId: string;
+        targetProjectId: string;
+        targetColumnId: string;
+         // Опциональная позиция в новой колонке
+      }>) => {
+        const {
+          sourceProjectId,
+          sourceColumnId,
+          sourceTaskId,
+          targetProjectId,
+          targetColumnId,
+        } = action.payload;
+      
+        const sourceProject = state.projects.find(p => p.id === sourceProjectId);
+        const targetProject = state.projects.find(p => p.id === targetProjectId);
+        console.log(action);
+        
+        if (!sourceProject || !targetProject) return;
+      
+        const sourceColumn = sourceProject.columns.find(c => c.id === sourceColumnId);
+        const targetColumn = targetProject.columns.find(c => c.id === targetColumnId);
+      
+        if (!sourceColumn || !targetColumn) return;
+      
+        const taskIndex = sourceColumn.tasks.findIndex(t => t.id === sourceTaskId);
+        if (taskIndex === -1) return;
+      
+        const [movedTask] = sourceColumn.tasks.splice(taskIndex, 1);
+        
+        // Обновляем порядок задач в исходной колонке
+        sourceColumn.tasks.forEach((task, index) => {
+          task.order = index;
+        });
+      
+        // Вставляем задачу в целевую колонку
+        const insertIndex = targetColumn.tasks.length;
+        targetColumn.tasks.splice(insertIndex, 0, movedTask);
+        
+        // Обновляем порядок задач в целевой колонке
+        targetColumn.tasks.forEach((task, index) => {
+          task.order = index;
+        });
+      }
     }
 })
 
@@ -170,5 +263,9 @@ export const {
   deleteColumn,
   addTask,
   deleteTask,
+  updateProjectTitle,
+  updateColumnTitle,
+  updateTaskTitle,
+  moveTask
 } = boardSlice.actions
 export default boardSlice.reducer;
