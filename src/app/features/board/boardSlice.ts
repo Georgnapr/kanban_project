@@ -16,15 +16,18 @@ const initialState: boardState = {
                 tasks: [
                   {
                     id: '1',
-                    title: 'Верстка лендинга'
+                    title: 'Верстка лендинга',
+                    createdAt: "Нет даты"
                   },
                   {
                     id: '2',
-                    title: 'Верстка dashboard'
+                    title: 'Верстка dashboard',
+                    createdAt: "Нет даты"
                   },
                   {
                     id: '3',
-                    title: 'Верстка стр. регистрации'
+                    title: 'Верстка стр. регистрации',
+                    createdAt: "Нет даты"
                   },
                 ]}
             ]
@@ -38,11 +41,13 @@ const initialState: boardState = {
                 tasks: [
                   {
                     id: '1',
-                    title: 'Верстка лендинга моб.'
+                    title: 'Верстка лендинга моб.',
+                    createdAt: "Нет даты"
                   },
                   {
                     id: '2',
-                    title: 'Верстка dashboard моб.'
+                    title: 'Верстка dashboard моб.',
+                    createdAt: "Нет даты"
                   },
                 ]}
             ]
@@ -125,18 +130,22 @@ const boardSlice = createSlice({
         projectId: string;
         columnId: string;
         taskTitle: string;
+        dueDate?: string; // Опциональный дедлайн при создании
       }>) => {
-        const { projectId, columnId, taskTitle } = action.payload;
+        const { projectId, columnId, taskTitle, dueDate } = action.payload;
         const project = state.projects.find(p => p.id === projectId);
         
         if (project) {
           const column = project.columns.find(c => c.id === columnId);
           if (column) {
+            const currentDate = new Date().toISOString();
             const newTask = {
-              id: Date.now().toString(), // или uuidv4()
+              id: Date.now().toString(),
               title: taskTitle,
               completed: false,
-              order: column.tasks.length + 1
+              order: column.tasks.length + 1,
+              createdAt: currentDate,        // Дата создания задачи
+              dueDate: dueDate || undefined  // Дедлайн только если указан
             };
             column.tasks.push(newTask);
           }
@@ -269,6 +278,14 @@ const boardSlice = createSlice({
             const task = column.tasks.find(t => t.id === taskId);
             if (task) {
               task.completed = completed;
+              
+              // Если задача отмечена как выполненная, устанавливаем дату завершения
+              if (completed) {
+                task.completedAt = new Date().toISOString();
+              } else {
+                // Если задача снова помечена как невыполненная, убираем дату завершения
+                task.completedAt = undefined;
+              }
             }
           }
         }
@@ -294,6 +311,27 @@ const boardSlice = createSlice({
           }
         }
       },
+
+      // Редьюсеры для обновления дат задач
+      updateTaskDueDate: (state, action: PayloadAction<{
+        projectId: string;
+        columnId: string;
+        taskId: string;
+        dueDate?: string; // Может быть undefined для удаления дедлайна
+      }>) => {
+        const { projectId, columnId, taskId, dueDate } = action.payload;
+        const project = state.projects.find(p => p.id === projectId);
+        
+        if (project) {
+          const column = project.columns.find(c => c.id === columnId);
+          if (column) {
+            const task = column.tasks.find(t => t.id === taskId);
+            if (task) {
+              task.dueDate = dueDate;
+            }
+          }
+        }
+      },
     }
 })
 
@@ -307,6 +345,7 @@ export const {
   updateProjectTitle,
   updateColumnTitle,
   updateTaskTitle,
+  updateTaskDueDate,
   moveTask,
   updateTaskStatus,
   updateTaskDescription,

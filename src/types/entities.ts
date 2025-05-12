@@ -20,4 +20,7 @@ export interface ITask {
     order?: number;
     completed?: boolean;
     description?: string;
+    createdAt: string;        // Дата создания задачи
+    dueDate?: string;         // Дедлайн (опциональное поле)
+    completedAt?: string;     // Дата фактического завершения (опциональное поле)
 }

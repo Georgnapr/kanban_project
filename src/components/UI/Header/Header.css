@@ -1,3 +1,4 @@
+/* Обновленные стили для Header.css */
 .header {
     display: flex;
     align-items: center;
@@ -7,8 +8,46 @@
     background-color: #5795ED;
     height: 60px;
     width: 100%;
-}
+  }
 
-.project-title {
+  .logo {
     margin-left: 50px;
-}
+  }
+  .project-title {
+    margin-left: 10px;
+    margin-right: 20px;
+  }
+  .project-menu {
+    margin-left: 20px;
+    font-size: 18px;
+    font-weight: 500;
+  }
+  .user-section {
+    display: flex;
+    align-items: center;
+    margin-left: auto; /* Сдвигает секцию вправо */
+    margin-right: 50px;
+  }
+  
+  .username {
+    font-size: 18px;
+    margin-right: 15px;
+    font-weight: 500;
+  }
+  
+  .logout-button {
+    background-color: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    font-family: 'Montserrat';
+    font-weight: 400;
+    transition: background-color 0.2s;
+  }
+  
+  .logout-button:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+  }

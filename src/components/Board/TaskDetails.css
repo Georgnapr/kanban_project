@@ -104,7 +104,6 @@
     padding: 10px;
     border: 1px solid #8EBCFE;
     border-radius: 5px;
-    font-family: inherit;
     font-size: 14px;
     color: #2F5487;
     resize: vertical;
@@ -138,3 +137,79 @@
   .btn-close:hover {
     color: #2F5487;
   }
+
+  /* Дополнения к TaskDetails.css */
+
+/* Стили для дат */
+.task-details-dates-info {
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.task-created-date, .task-completed-date {
+  margin: 5px 0;
+}
+
+.task-details-due-date {
+  margin-bottom: 20px;
+}
+
+.task-due-date-text {
+  font-family: 'Montserrat';
+  padding: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: inline-block;
+  border-radius: 5px;
+  font-weight: 400;
+  margin: 0;
+}
+
+.task-due-date-text:hover {
+  background-color: rgba(142, 188, 254, 0.1);
+}
+
+.task-due-date-text.no-date {
+  color: #555;
+  font-weight: 400;
+}
+
+/* Статус срока */
+.task-due-date-text.overdue {
+  color: #e74c3c;
+  background-color: rgba(231, 76, 60, 0.1);
+}
+
+.task-due-date-text.completed {
+  color: #27ae60;
+  background-color: rgba(39, 174, 96, 0.1);
+}
+
+.task-details-due-date-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #8EBCFE;
+  border-radius: 5px;
+  color: #2F5487;
+  margin: 10px 0;
+  font-family: 'Montserrat';
+}
+
+/* Чекбокс для срока */
+.due-date-checkbox {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+  cursor: pointer;
+}
+
+.due-date-checkbox input[type="checkbox"] {
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+.due-date-checkbox label {
+  font-size: 14px;
+  color: #2F5487;
+  cursor: pointer;
+}

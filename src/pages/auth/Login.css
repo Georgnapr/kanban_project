@@ -1,0 +1,89 @@
+/* src/pages/auth/Login.css */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f2f7ff;
+    padding: 20px;
+  }
+  
+  .login-card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    padding: 30px;
+  }
+  
+  .login-card h2 {
+    color: #2F5487;
+    margin-top: 0;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 24px;
+  }
+  
+  .login-subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 25px;
+    font-size: 14px;
+  }
+  
+  .login-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 6px;
+    color: #2F5487;
+    font-weight: 500;
+    font-size: 14px;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    color: #333;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+  }
+  
+  .form-group input:focus {
+    border-color: #5795ED;
+    outline: none;
+  }
+  
+  .error-message {
+    background-color: #ffebee;
+    color: #e53935;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    text-align: center;
+  }
+  
+  .demo-credentials {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    text-align: center;
+    font-size: 13px;
+    color: #666;
+  }
+  
+  .demo-credentials p {
+    margin: 5px 0;
+  }
