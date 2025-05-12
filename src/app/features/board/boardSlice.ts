@@ -252,7 +252,48 @@ const boardSlice = createSlice({
         targetColumn.tasks.forEach((task, index) => {
           task.order = index;
         });
-      }
+      },
+
+      updateTaskStatus: (state, action: PayloadAction<{
+        projectId: string;
+        columnId: string;
+        taskId: string;
+        completed: boolean;
+      }>) => {
+        const { projectId, columnId, taskId, completed } = action.payload;
+        const project = state.projects.find(p => p.id === projectId);
+        
+        if (project) {
+          const column = project.columns.find(c => c.id === columnId);
+          if (column) {
+            const task = column.tasks.find(t => t.id === taskId);
+            if (task) {
+              task.completed = completed;
+            }
+          }
+        }
+      },
+
+      // Обновление описания задачи
+      updateTaskDescription: (state, action: PayloadAction<{
+        projectId: string;
+        columnId: string;
+        taskId: string;
+        description: string;
+      }>) => {
+        const { projectId, columnId, taskId, description } = action.payload;
+        const project = state.projects.find(p => p.id === projectId);
+        
+        if (project) {
+          const column = project.columns.find(c => c.id === columnId);
+          if (column) {
+            const task = column.tasks.find(t => t.id === taskId);
+            if (task) {
+              task.description = description;
+            }
+          }
+        }
+      },
     }
 })
 
@@ -266,6 +307,8 @@ export const {
   updateProjectTitle,
   updateColumnTitle,
   updateTaskTitle,
-  moveTask
+  moveTask,
+  updateTaskStatus,
+  updateTaskDescription,
 } = boardSlice.actions
 export default boardSlice.reducer;

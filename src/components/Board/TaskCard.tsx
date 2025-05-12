@@ -1,9 +1,13 @@
+// Обновленный TaskCard.tsx с использованием RoundCheckbox
 import './TaskCard.css'
 import { ITask } from "../../types/entities"
 import { useAppDispatch } from '../../app/hooks';
-import { deleteTask, updateTaskTitle } from '../../app/features/board/boardSlice';
+import { deleteTask, updateTaskTitle, updateTaskStatus } from '../../app/features/board/boardSlice';
 import DropdownMenu from '../UI/DropDownMenu/DropDownMenu';
 import { useDrag } from 'react-dnd';
+import { useState } from 'react';
+import TaskDetails from './TaskDetails';
+import RoundCheckbox from '../UI/RoundCheckbox/RoundCheckbox';
 
 type Props = {
     taskcard: ITask;
@@ -13,6 +17,8 @@ type Props = {
 
 const TaskCard = ({taskcard, projectId, columnId }: Props) => {
   const dispatch = useAppDispatch();
+  const [showDetails, setShowDetails] = useState(false);
+  
   const [{ isDragging }, drag] = useDrag(() => ({
     type: 'TASK',
     item: { taskcard, projectId, columnId },
@@ -21,12 +27,32 @@ const TaskCard = ({taskcard, projectId, columnId }: Props) => {
     }),
   }));
 
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newStatus = e.target.checked;
+    
+    dispatch(updateTaskStatus({
+      projectId,
+      columnId,
+      taskId: taskcard.id,
+      completed: newStatus
+    }));
+  };
+
+  const handleTaskCardClick = () => {
+    setShowDetails(true);
+  };
+
   return (
-    <div ref={drag} className="task-card">
-        <label className="round-checkbox">
-          <input type='checkbox'></input>
-          <span className="checkmark"></span>
-        </label>
+    <>
+      <div 
+        ref={drag} 
+        className={`task-card ${taskcard.completed ? 'task-completed' : ''}`}
+        onClick={handleTaskCardClick}
+      >
+        <RoundCheckbox 
+          checked={taskcard.completed || false}
+          onChange={handleCheckboxChange}
+        />
         <div className='taskcard-title'>{taskcard.title}</div>
         <DropdownMenu
           entityType="task"
@@ -42,7 +68,17 @@ const TaskCard = ({taskcard, projectId, columnId }: Props) => {
             taskId: taskcard.id
           }))}
         />
-    </div>
+      </div>
+      
+      {showDetails && (
+        <TaskDetails
+          task={taskcard}
+          projectId={projectId}
+          columnId={columnId}
+          onClose={() => setShowDetails(false)}
+        />
+      )}
+    </>
   )
 }
 

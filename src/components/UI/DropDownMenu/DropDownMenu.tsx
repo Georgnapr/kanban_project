@@ -1,10 +1,12 @@
+// Обновленный компонент DropdownMenu.tsx
+// Добавим возможность остановки всплытия событий
+
 import { useState, useRef, useEffect } from 'react';
 import InputModal from '../InputModal';
 import './DropDownMenu.css'
 
 interface DropdownMenuProps {
   entityType: 'project' | 'column' | 'task';
- // Для задач (columnId) и колонок (projectId)
   onRename: (newTitle: string) => void;
   onDelete: () => void;
   className?: string;
@@ -34,14 +36,18 @@ const DropdownMenu = ({
     };
   }, []);
 
-  const toggleMenu = () => setIsOpen(!isOpen);
+  const toggleMenu = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Остановка всплытия
+    setIsOpen(!isOpen);
+  };
 
   const handleRename = (newTitle: string) => {
     onRename(newTitle);
     setIsRenameModalOpen(false);
   };
 
-  const handleDelete = () => {
+  const handleDelete = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Остановка всплытия
     if (window.confirm(`Вы уверены, что хотите удалить ${getEntityName()}?`)) {
       onDelete();
     }
@@ -58,7 +64,11 @@ const DropdownMenu = ({
   };
 
   return (
-    <div className={`dropdown ${className}`} ref={dropdownRef}>
+    <div 
+      className={`dropdown ${className}`} 
+      ref={dropdownRef}
+      onClick={(e) => e.stopPropagation()} // Остановка всплытия для всего компонента
+    >
       <button 
         className="dropdown__toggle" 
         onClick={toggleMenu}
@@ -72,7 +82,8 @@ const DropdownMenu = ({
         <div className="dropdown__menu">
           <button
             className="dropdown__item"
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation(); // Остановка всплытия
               setIsRenameModalOpen(true);
               setIsOpen(false);
             }}

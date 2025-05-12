@@ -1,7 +1,7 @@
 import './Board.css'
 import Column from './Column'
 import { IProject } from "../../types/entities";
-import Button from '../UI/Button';
+import Button from '../UI/Button/Button';
 import { useAppDispatch } from '../../app/hooks';
 import { useState } from 'react';
 import { addColumn } from '../../app/features/board/boardSlice';

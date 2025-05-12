@@ -1,7 +1,7 @@
 import './ProjectPage.css';
 import { Link, useParams } from 'react-router-dom';
 import Board from '../../components/Board/Board';
-import Button from '../../components/UI/Button';
+import Button from '../../components/UI/Button/Button';
 import { useAppSelector } from '../../app/hooks';
 import { selectProjectById } from '../../app/features/board/boardSelectors';
 

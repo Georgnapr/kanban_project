@@ -1,0 +1,112 @@
+/* TaskDetails.css */
+.task-details-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .task-details-modal {
+    background-color: white;
+    border-radius: 10px;
+    width: 600px;
+    max-width: 90%;
+    max-height: 80vh;
+    padding: 20px;
+    overflow-y: auto;
+    color: #2F5487;
+  }
+  
+  .task-details-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .task-details-title {
+    margin: 0;
+    color: #2F5487;
+    font-size: 22px;
+  }
+  
+  .task-details-title-input {
+    font-size: 22px;
+    width: 70%;
+    padding: 8px;
+    border: 1px solid #8EBCFE;
+    border-radius: 5px;
+  }
+  
+  .task-details-controls {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .btn {
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .btn-primary {
+    background-color: #5795ED;
+    color: white;
+  }
+  
+  .btn-secondary {
+    background-color: #F2F2F2;
+    color: #2F5487;
+  }
+  
+  .btn-edit {
+    background-color: #D2E5FF;
+    color: #2F5487;
+  }
+  
+  .btn-close {
+    background: none;
+    font-size: 24px;
+    padding: 0 8px;
+  }
+  
+  .task-details-status {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    color: #2F5487;
+  }
+  
+  .status-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #2F5487;
+  }
+  
+  .task-details-description {
+    margin-top: 20px;
+    color: #2F5487;
+  }
+  
+  .task-details-description h3 {
+    color: #2F5487;
+    margin-bottom: 10px;
+  }
+  
+  .task-details-description-textarea {
+    width: 90%;
+    min-height: 150px;
+    padding: 10px;
+    border: 1px solid #8EBCFE;
+    border-radius: 5px;
+    font-family: inherit;
+  }

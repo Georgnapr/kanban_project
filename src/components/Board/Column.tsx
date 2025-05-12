@@ -1,7 +1,8 @@
+// Улучшенная версия Column.tsx с визуальным отображением при перетаскивании
 import { useState } from 'react';
 import { IColumn, ITask } from '../../types/entities';
 import TaskCard from './TaskCard';
-import Button from '../UI/Button';
+import Button from '../UI/Button/Button';
 import InputModal from '../UI/InputModal';
 import { useAppDispatch } from '../../app/hooks';
 import { addTask, deleteColumn, moveTask, updateColumnTitle } from '../../app/features/board/boardSlice';
@@ -11,7 +12,7 @@ import { useDrop } from 'react-dnd';
 
 type Props = {
   column: IColumn;
-  projectId: string; // Добавим projectId для связи с редюсером
+  projectId: string;
 }
 
 const Column = ({ column, projectId }: Props) => {
@@ -26,7 +27,7 @@ const Column = ({ column, projectId }: Props) => {
     }));
   };
 
-  const [{ isOver }, drop] = useDrop(() => ({
+  const [{ isOver, canDrop }, drop] = useDrop(() => ({
     accept: 'TASK',
     drop: (item: { taskcard: ITask; projectId: string; columnId: string }) => {
       if (item.columnId !== column.id || item.projectId !== projectId) {
@@ -41,11 +42,15 @@ const Column = ({ column, projectId }: Props) => {
     },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
+      canDrop: !!monitor.canDrop(),
     }),
   }));
 
+  // Определяем класс для колонки в зависимости от состояния перетаскивания
+  const columnClass = `column ${isOver ? 'column-drop-active' : ''} ${canDrop ? 'column-drop-possible' : ''}`;
+
   return (
-    <div ref={drop} className='column'>
+    <div ref={drop} className={columnClass}>
       <div className='column-title-container'>
         <span className='column-title'>{column.title}</span>
         <DropdownMenu
@@ -62,9 +67,11 @@ const Column = ({ column, projectId }: Props) => {
         />
       </div>
 
-      {column.tasks.map((task) => (
-        <TaskCard taskcard={task} key={task.id} columnId={column.id} projectId={projectId}/>
-      ))}
+      <div className="column-tasks-container">
+        {column.tasks.map((task) => (
+          <TaskCard taskcard={task} key={task.id} columnId={column.id} projectId={projectId}/>
+        ))}
+      </div>
       
       <Button onClick={() => setIsModalOpen(true)}>
         Добавить задачу

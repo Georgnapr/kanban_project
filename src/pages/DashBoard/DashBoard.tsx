@@ -1,5 +1,5 @@
 import ProjectCard from '../../components/UI/ProjectCard';
-import Button from '../../components/UI/Button';
+import Button from '../../components/UI/Button/Button';
 import "./DashBoard.css"
 import { useAppSelector } from '../../app/hooks';
 import { selectAllProjects } from '../../app/features/board/boardSelectors';

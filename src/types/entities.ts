@@ -19,4 +19,5 @@ export interface ITask {
     title: string;
     order?: number;
     completed?: boolean;
+    description?: string;
 }
