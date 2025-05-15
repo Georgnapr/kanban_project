@@ -17,17 +17,17 @@ const initialState: boardState = {
                   {
                     id: '1',
                     title: 'Верстка лендинга',
-                    createdAt: "Нет даты"
+                    createdAt: new Date().toISOString(),
                   },
                   {
                     id: '2',
                     title: 'Верстка dashboard',
-                    createdAt: "Нет даты"
+                    createdAt: new Date().toISOString(),
                   },
                   {
                     id: '3',
                     title: 'Верстка стр. регистрации',
-                    createdAt: "Нет даты"
+                    createdAt: new Date().toISOString(),
                   },
                 ]}
             ]
@@ -42,12 +42,12 @@ const initialState: boardState = {
                   {
                     id: '1',
                     title: 'Верстка лендинга моб.',
-                    createdAt: "Нет даты"
+                    createdAt: new Date().toISOString(),
                   },
                   {
                     id: '2',
                     title: 'Верстка dashboard моб.',
-                    createdAt: "Нет даты"
+                    createdAt: new Date().toISOString(),
                   },
                 ]}
             ]

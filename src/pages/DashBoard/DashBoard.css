@@ -7,10 +7,9 @@
 .action-bar {
     display: flex;
     align-items: center;
-    height: 80px;
+    height: 50px;
     width: 100%;
     font-weight: 400;
-    background-color: #F2F2F2;
     color: #2F5487;
     border: 1px solid #2F5487;
     border-width: 0px 0px 1px 0px;
