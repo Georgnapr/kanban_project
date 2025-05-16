@@ -1,20 +1,41 @@
+
+/* src/pages/projectPage/ProjectPage.css */
 .project-page {
-    margin-left: 50px;
-
+  margin-left: 60px; /* По умолчанию с учетом свернутой боковой панели */
+  margin-right: 50px;
+  transition: margin-left 0.3s ease; /* Плавный переход для смещения */
+  width: calc(100% - 100px); /* По умолчанию для свернутой панели */
+  overflow-x: hidden;
 }
 
+/* Стиль при развернутой боковой панели */
+.project-page.sidebar-expanded {
+  margin-left: 310px;
+  width: calc(100% - 350px); /* 300px боковая панель + 50px отступ справа */
+}
+
+
+
+/* Стиль для кнопки "Назад к доскам" */
+.back-button-container {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
 .action-bar {
-    display: flex;
-    align-items: center;
-       justify-content: space-between;
-    height: 50px;
-    width: 100%;
-    font-weight: 400;
-    color: #2F5487;
-    border: 1px solid #2F5487;
-    border-width: 0px 0px 1px 0px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 50px;
+  width: 100%;
+  font-weight: 400;
+  color: #2F5487;
+  border: 1px solid #2F5487;
+  border-width: 0px 0px 1px 0px;
+  position: sticky;
+  top: 60px; /* Высота header */
+  background-color: white;
+  z-index: 5;
 }
-
 .action-bar-title{
     margin-left: 50px;
 }

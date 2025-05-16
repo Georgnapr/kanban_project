@@ -1,0 +1,138 @@
+/* src/components/Sidebar/Sidebar.css */
+.sidebar {
+  position: fixed;
+  top: 110px; /* Высота header + action-bar */
+  left: 0;
+  height: calc(100vh - 110px);
+  border-right: 1px solid #2F5487;
+  transition: width 0.3s ease;
+  z-index: 10;
+  
+}
+
+.sidebar.collapsed {
+  width: 50px;
+}
+
+.sidebar.expanded {
+  width: 300px;
+}
+
+/* Кнопка переключения - ключевой элемент */
+.toggle-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  background-color: #8EBCFE;
+  border: none;
+  border-radius: 50%;
+  color: white;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 15;
+  transition: background-color 0.2s;
+}
+
+.toggle-button:hover {
+  background-color: #5795ED;
+}
+
+.sidebar-content {
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Стили для развернутого меню */
+.full-menu {
+  width: 100%;
+  padding: 10px;
+  padding-top: 50px; /* Место для кнопки переключения */
+}
+
+.sidebar-header {
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #D2E5FF;
+}
+
+.sidebar-header h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #2F5487;
+}
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.2s;
+}
+
+.sidebar-item:hover {
+  background-color: #D2E5FF;
+}
+
+.sidebar-icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+}
+
+.sidebar-label {
+  font-family: 'Montserrat';
+  color: #2F5487;
+}
+
+/* Стили для иконок в свернутом режиме */
+.icons-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 50px; /* Место для кнопки переключения */
+  gap: 15px;
+}
+
+.sidebar-icon-item {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.2s;
+}
+
+.sidebar-icon-item:hover {
+  background-color: #D2E5FF;
+}
+
+/* Стили для SVG-иконок в развернутом режиме */
+.svg-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+/* Стили для SVG-иконок в свернутом режиме */
+.svg-icon-small {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
