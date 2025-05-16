@@ -1,3 +1,4 @@
+// src/components/Board/Board.tsx
 import './Board.css'
 import Column from './Column'
 import { IProject } from "../../types/entities";
@@ -32,19 +33,18 @@ const Board = ({project}: Props) => {
             onSubmit={handleAddColumn}
             />
         )}
-        <div className='columns-container'>
-            {project.columns.map((column) =>(
-                <Column  column={column} key={column.id} projectId={project.id}></Column>
-            ))}
-            <div>
-                <Button onClick={() => setIsModalOpen(true)}>Добавить колонку</Button>
+        {/* Оборачиваем columns-container в дополнительный div для скроллинга */}
+        <div className="board-container">
+            <div className='columns-container'>
+                {project.columns.map((column) =>(
+                    <Column column={column} key={column.id} projectId={project.id}></Column>
+                ))}
+                <div className="add-column-button">
+                    <Button onClick={() => setIsModalOpen(true)}>Добавить колонку</Button>
+                </div>
             </div>
-            {/*TODO: логика создания новой колонки*/}
-            {/*TODO: drag-n-drop для перемещения колонок*/}
         </div>
-        <p></p>
     </>
-    
   )
 }
 

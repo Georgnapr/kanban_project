@@ -53,7 +53,20 @@ const initialState: boardState = {
             ]
           }
     ], 
-    activeProjectId: null,
+      activeProjectId: null,
+        filters: {
+          searchQuery: '',
+          statusFilters: {
+            completed: false,
+            active: false
+          },
+          dueDateFilters: {
+            overdue: false,
+            upcoming: false,
+            noDueDate: false
+          },
+          sortBy: 'newest'
+        }
   };
 
 const boardSlice = createSlice({
@@ -332,7 +345,27 @@ const boardSlice = createSlice({
           }
         }
       },
-    }
+
+      setSearchQuery: (state, action: PayloadAction<string>) => {
+        state.filters.searchQuery = action.payload;
+      },
+      
+      toggleStatusFilter: (state, action: PayloadAction<'completed' | 'active'>) => {
+        state.filters.statusFilters[action.payload] = !state.filters.statusFilters[action.payload];
+      },
+      
+      toggleDueDateFilter: (state, action: PayloadAction<'overdue' | 'upcoming' | 'noDueDate'>) => {
+        state.filters.dueDateFilters[action.payload] = !state.filters.dueDateFilters[action.payload];
+      },
+      
+      setSortBy: (state, action: PayloadAction<'newest' | 'oldest' | 'dueDate' | 'alphabetical'>) => {
+        state.filters.sortBy = action.payload;
+      },
+      
+      resetFilters: (state) => {
+        state.filters = initialState.filters;
+      }
+    }, 
 })
 
 export const { 
@@ -349,5 +382,10 @@ export const {
   moveTask,
   updateTaskStatus,
   updateTaskDescription,
+  setSearchQuery,
+  toggleStatusFilter,
+  toggleDueDateFilter,
+  setSortBy,
+  resetFilters,
 } = boardSlice.actions
 export default boardSlice.reducer;

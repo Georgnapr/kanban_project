@@ -1,4 +1,5 @@
-.task-card{
+/* src/components/Board/TaskCard.css */
+.task-card {
     display: flex;
     text-align: start;   
     background-color: white;
@@ -9,16 +10,99 @@
     margin-bottom: 10px;
     padding: 10px;
     border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
 }
+
 .task-card:hover {
     outline: 1px solid #2F5487;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.task-card-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.task-card-header {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
 }
 
 .taskcard-title {
     font-weight: 400;
     width: 170px;
+    margin-right: auto;
+    word-break: break-word;
 }
 
-input{
+.task-completed .taskcard-title {
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+
+/* Индикаторы */
+.task-card-indicators {
+    display: flex;
+    align-items: center;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid #f0f0f0;
+    font-size: 12px;
+}
+
+.task-indicator {
+    display: flex;
+    align-items: center;
+    margin-right: 12px;
+    color: #8EBCFE;
+}
+
+.task-icon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    margin-right: 5px;
+}
+
+/* Иконка описания - будет использовать эмодзи до тех пор, пока не подключите иконочный шрифт */
+.description-icon {
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%238EBCFE"><path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8l-6-6zM6 20V4h7v5h5v11H6zM9 8h2v2H9V8zm0 4h6v2H9v-2zm0 4h6v2H9v-2z"/></svg>');
+}
+
+/* Иконка срока */
+.due-date-icon {
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%238EBCFE"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/></svg>');
+}
+
+.due-date-text {
+    font-size: 11px;
+    color: #2F5487;
+}
+
+/* Состояния срока */
+.due-date-overdue .due-date-icon {
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23e74c3c"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/></svg>');
+}
+
+.due-date-overdue .due-date-text {
+    color: #e74c3c;
+    font-weight: 500;
+}
+
+.due-date-completed .due-date-icon {
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2327ae60"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm-1.3-5.7l-4-4 1.4-1.4 2.6 2.6 5.6-5.6 1.4 1.4-7 7z"/></svg>');
+}
+
+.due-date-completed .due-date-text {
+    color: #27ae60;
+}
+
+input {
     margin: 0px;
 }

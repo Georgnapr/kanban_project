@@ -37,6 +37,33 @@ const TaskDetails = ({ task, projectId, columnId, onClose }: TaskDetailsProps) =
     setHasDueDate(Boolean(task.dueDate));
   }, [task.title, task.description, task.dueDate]);
 
+  // Форматирование даты для input type="datetime-local" с сохранением часового пояса
+  const formatDateForInput = (dateString: string): string => {
+    const date = new Date(dateString);
+    
+    // Форматируем в виде YYYY-MM-DDThh:mm с сохранением местного часового пояса
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  };
+
+  // Получение текущей даты и времени с сохранением часового пояса
+  const getCurrentDateTime = (): string => {
+    const now = new Date();
+    
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  };
+  
   // Форматирование даты для отображения
   const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
@@ -47,18 +74,6 @@ const TaskDetails = ({ task, projectId, columnId, onClose }: TaskDetailsProps) =
       hour: '2-digit',
       minute: '2-digit'
     });
-  };
-
-  // Форматирование даты для input type="datetime-local"
-  const formatDateForInput = (dateString: string): string => {
-    const date = new Date(dateString);
-    return date.toISOString().slice(0, 16); // Формат YYYY-MM-DDThh:mm
-  };
-
-  // Получение текущей даты и времени для инпута
-  const getCurrentDateTime = (): string => {
-    const now = new Date();
-    return now.toISOString().slice(0, 16); // Формат YYYY-MM-DDThh:mm
   };
 
   const handleSaveTitle = () => {

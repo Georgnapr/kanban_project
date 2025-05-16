@@ -1,4 +1,4 @@
-// Обновленный TaskCard.tsx с использованием RoundCheckbox
+// src/components/Board/TaskCard.tsx
 import './TaskCard.css'
 import { ITask } from "../../types/entities"
 import { useAppDispatch } from '../../app/hooks';
@@ -42,6 +42,28 @@ const TaskCard = ({taskcard, projectId, columnId }: Props) => {
     setShowDetails(true);
   };
 
+  // Форматирование даты для отображения
+  const formatDueDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('ru-RU', { 
+      day: '2-digit', 
+      month: '2-digit'
+    });
+  };
+
+  // Проверка просрочен ли дедлайн
+  const isDueDatePassed = (): boolean => {
+    if (!taskcard.dueDate || taskcard.completed) return false;
+    return new Date(taskcard.dueDate) < new Date();
+  };
+
+  // Определение класса для отображения срока
+  const getDueDateClass = (): string => {
+    if (taskcard.completed) return 'due-date-completed';
+    if (isDueDatePassed()) return 'due-date-overdue';
+    return '';
+  };
+
   return (
     <>
       <div 
@@ -49,25 +71,47 @@ const TaskCard = ({taskcard, projectId, columnId }: Props) => {
         className={`task-card ${taskcard.completed ? 'task-completed' : ''}`}
         onClick={handleTaskCardClick}
       >
-        <RoundCheckbox 
-          checked={taskcard.completed || false}
-          onChange={handleCheckboxChange}
-        />
-        <div className='taskcard-title'>{taskcard.title}</div>
-        <DropdownMenu
-          entityType="task"
-          onRename={(newTitle) => dispatch(updateTaskTitle({
-            projectId,
-            columnId,
-            taskId: taskcard.id,
-            newTitle
-          }))}
-          onDelete={() => dispatch(deleteTask({
-            projectId,
-            columnId,
-            taskId: taskcard.id
-          }))}
-        />
+        <div className="task-card-content">
+          <div className="task-card-header">
+            <RoundCheckbox 
+              checked={taskcard.completed || false}
+              onChange={handleCheckboxChange}
+            />
+            <div className='taskcard-title'>{taskcard.title}</div>
+            <DropdownMenu
+              entityType="task"
+              onRename={(newTitle) => dispatch(updateTaskTitle({
+                projectId,
+                columnId,
+                taskId: taskcard.id,
+                newTitle
+              }))}
+              onDelete={() => dispatch(deleteTask({
+                projectId,
+                columnId,
+                taskId: taskcard.id
+              }))}
+            />
+          </div>
+          
+          {/* Индикаторы только при наличии описания или срока */}
+          {(taskcard.description || taskcard.dueDate) && (
+            <div className="task-card-indicators">
+              {taskcard.description && (
+                <div className="task-indicator description-indicator" title="Есть описание">
+                  <i className="task-icon description-icon"></i>
+                </div>
+              )}
+              
+              {taskcard.dueDate && (
+                <div className={`task-indicator due-date-indicator ${getDueDateClass()}`} title="Срок выполнения">
+                  <i className="task-icon due-date-icon"></i>
+                  <span className="due-date-text">{formatDueDate(taskcard.dueDate)}</span>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
       
       {showDetails && (

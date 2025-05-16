@@ -4,11 +4,12 @@ import { IColumn, ITask } from '../../types/entities';
 import TaskCard from './TaskCard';
 import Button from '../UI/Button/Button';
 import InputModal from '../UI/InputModal';
-import { useAppDispatch } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { addTask, deleteColumn, moveTask, updateColumnTitle } from '../../app/features/board/boardSlice';
 import './Column.css';
 import DropdownMenu from '../UI/DropDownMenu/DropDownMenu';
 import { useDrop } from 'react-dnd';
+import { selectFilteredTasks } from '../../app/features/board/boardSelectors';
 
 type Props = {
   column: IColumn;
@@ -46,6 +47,11 @@ const Column = ({ column, projectId }: Props) => {
     }),
   }));
 
+    // Используем селектор для отфильтрованных задач вместо прямого доступа к задачам
+  const filteredTasks = useAppSelector(state => 
+    selectFilteredTasks(state, projectId, column.id)
+  );
+
   // Определяем класс для колонки в зависимости от состояния перетаскивания
   const columnClass = `column ${isOver ? 'column-drop-active' : ''} ${canDrop ? 'column-drop-possible' : ''}`;
 
@@ -68,7 +74,8 @@ const Column = ({ column, projectId }: Props) => {
       </div>
 
       <div className="column-tasks-container">
-        {column.tasks.map((task) => (
+        {/* Используем filteredTasks вместо column.tasks */}
+        {filteredTasks.map((task) => (
           <TaskCard taskcard={task} key={task.id} columnId={column.id} projectId={projectId}/>
         ))}
       </div>
