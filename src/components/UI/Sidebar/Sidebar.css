@@ -1,4 +1,8 @@
 /* src/components/Sidebar/Sidebar.css */
+body {
+  overflow-x: hidden; /* Предотвращаем горизонтальную прокрутку всей страницы */
+}
+
 .sidebar {
   position: fixed;
   top: 110px; /* Высота header + action-bar */

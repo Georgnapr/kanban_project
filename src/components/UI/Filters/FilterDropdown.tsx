@@ -9,7 +9,6 @@ import {
   resetFilters
 } from '../../../app/features/board/boardSlice';
 import { selectFilters, selectFilteredTasksCount } from '../../../app/features/board/boardSelectors';
-import Button from '../../UI/Button/Button';
 import './FilterDropdown.css';
 
 interface FilterDropdownProps {
