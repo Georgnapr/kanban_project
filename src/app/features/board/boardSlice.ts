@@ -1,372 +1,408 @@
+// src/app/features/board/boardSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { boardState } from './boardTypes';
+import { BoardState } from './boardTypes';
+import { IColumn, ITask } from '../../../types/entities';
 
-const initialState: boardState = {
-    projects: [ // Ваш initial state
-        {
-            id: '1',
-            title: 'Разработка сайта',
-            columns: [
-              { id: '1', 
-                title: 'Дизайн главной', 
-                tasks: [
-                ]},
-              { id: '2', 
-                title: 'Верстка', 
-                tasks: [
-                  {
-                    id: '1',
-                    title: 'Верстка лендинга',
-                    createdAt: new Date().toISOString(),
-                  },
-                  {
-                    id: '2',
-                    title: 'Верстка dashboard',
-                    createdAt: new Date().toISOString(),
-                  },
-                  {
-                    id: '3',
-                    title: 'Верстка стр. регистрации',
-                    createdAt: new Date().toISOString(),
-                  },
-                ]}
-            ]
-          },
-          {
-            id: '2',
-            title: 'Мобильное приложение',
-            columns: [
-              { id: '1', 
-                title: 'Прототип', 
-                tasks: [
-                  {
-                    id: '1',
-                    title: 'Верстка лендинга моб.',
-                    createdAt: new Date().toISOString(),
-                  },
-                  {
-                    id: '2',
-                    title: 'Верстка dashboard моб.',
-                    createdAt: new Date().toISOString(),
-                  },
-                ]}
-            ]
-          }
-    ], 
-      activeProjectId: null,
-        filters: {
-          searchQuery: '',
-          statusFilters: {
-            completed: false,
-            active: false
-          },
-          dueDateFilters: {
-            overdue: false,
-            upcoming: false,
-            noDueDate: false
-          },
-          sortBy: 'newest'
-        }
-  };
+// Начальное состояние с плоской структурой
+const initialState: BoardState = {
+  projects: {
+    '1': {
+      id: '1',
+      title: 'Разработка сайта',
+      createdAt: new Date().toISOString()
+    },
+    '2': {
+      id: '2',
+      title: 'Мобильное приложение',
+      createdAt: new Date().toISOString()
+    }
+  },
+  columns: {
+    '1': {
+      id: '1',
+      projectId: '1',
+      title: 'Дизайн главной',
+      order: 0,
+      createdAt: new Date().toISOString()
+    },
+    '2': {
+      id: '2',
+      projectId: '1',
+      title: 'Верстка',
+      order: 1,
+      createdAt: new Date().toISOString()
+    },
+    '3': {
+      id: '3',
+      projectId: '2',
+      title: 'Прототип',
+      order: 0,
+      createdAt: new Date().toISOString()
+    }
+  },
+  tasks: {
+    '1': {
+      id: '1',
+      columnId: '2',
+      projectId: '1',
+      title: 'Верстка лендинга',
+      order: 0,
+      createdAt: new Date().toISOString()
+    },
+    '2': {
+      id: '2',
+      columnId: '2',
+      projectId: '1',
+      title: 'Верстка dashboard',
+      order: 1,
+      createdAt: new Date().toISOString()
+    },
+    '3': {
+      id: '3',
+      columnId: '2',
+      projectId: '1',
+      title: 'Верстка стр. регистрации',
+      order: 2,
+      createdAt: new Date().toISOString()
+    },
+    '4': {
+      id: '4',
+      columnId: '3',
+      projectId: '2',
+      title: 'Верстка лендинга моб.',
+      order: 0,
+      createdAt: new Date().toISOString()
+    },
+    '5': {
+      id: '5',
+      columnId: '3',
+      projectId: '2',
+      title: 'Верстка dashboard моб.',
+      order: 1,
+      createdAt: new Date().toISOString()
+    }
+  },
+  activeProjectId: null,
+  filters: {
+    searchQuery: '',
+    statusFilters: {
+      completed: false,
+      active: false
+    },
+    dueDateFilters: {
+      overdue: false,
+      upcoming: false,
+      noDueDate: false
+    },
+    sortBy: 'newest'
+  },
+  status: 'idle',
+  error: null
+};
 
 const boardSlice = createSlice({
-    name: 'board',
-    initialState,
-    reducers : {
-      createProject: (state, action: PayloadAction<{ title: string }>) => {
-        const dateId = Date.now().toString(); // Генерируем ID из текущей даты
-        
-        const defaultColumns = [
-          {
-            id: `${dateId}-1`, // Используем дату + суффикс для колонок
-            title: "Сделать",
-            tasks: []
-          },
-          {
-            id: `${dateId}-2`,
-            title: "Сделано",
-            tasks: []
-          }
-        ];
-        
-        const newProject = {
-          id: dateId, // Используем дату как ID проекта
-          title: action.payload.title,
-          columns: defaultColumns
-        };
-        
-        state.projects.push(newProject);
-      },
-      deleteProject: (state, action: PayloadAction<{ projectId: string }>) => {
-        state.projects = state.projects.filter(
-          project => project.id !== action.payload.projectId
-        );
-        // Сбрасываем активный проект, если он был удален
-        if (state.activeProjectId === action.payload.projectId) {
-          state.activeProjectId = null;
-        }
-      },
-
-      addColumn: (state, action: PayloadAction<{
-        projectId: string;
-        columnTitle: string;
-      }>) => {
-        const { projectId, columnTitle } = action.payload;
-        const project = state.projects.find(p => p.id === projectId);
-        const dateId = Date.now().toString();
-        if (project) {
-          const newColumn = {
-            id: `${dateId}`,
-            title: columnTitle,
-            tasks: []
-          };
-          project.columns.push(newColumn);
-        }
-      },
-
-      deleteColumn: (state, action: PayloadAction<{
-        projectId: string;
-        columnId: string;
-      }>) => {
-        const { projectId, columnId } = action.payload;
-        const project = state.projects.find(p => p.id === projectId);
-        
-        if (project) {
-          project.columns = project.columns.filter(
-            column => column.id !== columnId
-          );
-        }
-      },
-
-
-      addTask: (state, action: PayloadAction<{
-        projectId: string;
-        columnId: string;
-        taskTitle: string;
-        dueDate?: string; // Опциональный дедлайн при создании
-      }>) => {
-        const { projectId, columnId, taskTitle, dueDate } = action.payload;
-        const project = state.projects.find(p => p.id === projectId);
-        
-        if (project) {
-          const column = project.columns.find(c => c.id === columnId);
-          if (column) {
-            const currentDate = new Date().toISOString();
-            const newTask = {
-              id: Date.now().toString(),
-              title: taskTitle,
-              completed: false,
-              order: column.tasks.length + 1,
-              createdAt: currentDate,        // Дата создания задачи
-              dueDate: dueDate || undefined  // Дедлайн только если указан
-            };
-            column.tasks.push(newTask);
-          }
-        }
-      },
-
-      deleteTask: (state, action: PayloadAction<{
-        projectId: string;
-        columnId: string;
-        taskId: string;
-      }>) => {
-        const { projectId, columnId, taskId } = action.payload;
-        const project = state.projects.find(p => p.id === projectId);
-        
-        if (project) {
-          const column = project.columns.find(c => c.id === columnId);
-          if (column) {
-            column.tasks = column.tasks.filter(
-              task => task.id !== taskId
-            );
-          }
-        }
-      },
-            // Изменение названия проекта
-      updateProjectTitle: (state, action: PayloadAction<{
-        projectId: string;
-        newTitle: string;
-      }>) => {
-        const { projectId, newTitle } = action.payload;
-        const project = state.projects.find(p => p.id === projectId);
-        if (project) {
-          project.title = newTitle;
-        }
-      },
-
-      // Изменение названия колонки
-      updateColumnTitle: (state, action: PayloadAction<{
-        projectId: string;
-        columnId: string;
-        newTitle: string;
-      }>) => {
-        const { projectId, columnId, newTitle } = action.payload;
-        const project = state.projects.find(p => p.id === projectId);
-        if (project) {
-          const column = project.columns.find(c => c.id === columnId);
-          if (column) {
-            column.title = newTitle;
-          }
-        }
-      },
-
-      // Изменение названия задачи
-      updateTaskTitle: (state, action: PayloadAction<{
-        projectId: string;
-        columnId: string;
-        taskId: string;
-        newTitle: string;
-      }>) => {
-        const { projectId, columnId, taskId, newTitle } = action.payload;
-        const project = state.projects.find(p => p.id === projectId);
-        if (project) {
-          const column = project.columns.find(c => c.id === columnId);
-          if (column) {
-            const task = column.tasks.find(t => t.id === taskId);
-            if (task) {
-              task.title = newTitle;
+  name: 'board',
+  initialState,
+  reducers: {
+    // Редьюсеры для проектов
+    createProject: (state, action: PayloadAction<{ title: string }>) => {
+      const dateId = Date.now().toString();
+      
+      // Добавляем проект
+      state.projects[dateId] = {
+        id: dateId,
+        title: action.payload.title,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+      
+      // Создаем дефолтные колонки для проекта
+      const column1Id = `${dateId}-1`;
+      const column2Id = `${dateId}-2`;
+      
+      // Добавляем колонки
+      state.columns[column1Id] = {
+        id: column1Id,
+        projectId: dateId,
+        title: "Сделать",
+        order: 0,
+        createdAt: new Date().toISOString()
+      };
+      
+      state.columns[column2Id] = {
+        id: column2Id,
+        projectId: dateId,
+        title: "Сделано",
+        order: 1,
+        createdAt: new Date().toISOString()
+      };
+    },
+    
+    deleteProject: (state, action: PayloadAction<{ projectId: string }>) => {
+      const { projectId } = action.payload;
+      
+      // Удаляем все колонки проекта и их задачи
+      Object.values(state.columns).forEach(column => {
+        if (column.projectId === projectId) {
+          // Удаляем все задачи колонки
+          Object.values(state.tasks).forEach(task => {
+            if (task.columnId === column.id) {
+              delete state.tasks[task.id];
             }
-          }
+          });
+          
+          // Удаляем колонку
+          delete state.columns[column.id];
         }
-      },
-      moveTask: (state, action: PayloadAction<{
-        sourceProjectId: string;
-        sourceColumnId: string;
-        sourceTaskId: string;
-        targetProjectId: string;
-        targetColumnId: string;
-         // Опциональная позиция в новой колонке
-      }>) => {
-        const {
-          sourceProjectId,
-          sourceColumnId,
-          sourceTaskId,
-          targetProjectId,
-          targetColumnId,
-        } = action.payload;
+      });
       
-        const sourceProject = state.projects.find(p => p.id === sourceProjectId);
-        const targetProject = state.projects.find(p => p.id === targetProjectId);
-        console.log(action);
-        
-        if (!sourceProject || !targetProject) return;
+      // Удаляем проект
+      delete state.projects[projectId];
       
-        const sourceColumn = sourceProject.columns.find(c => c.id === sourceColumnId);
-        const targetColumn = targetProject.columns.find(c => c.id === targetColumnId);
-      
-        if (!sourceColumn || !targetColumn) return;
-      
-        const taskIndex = sourceColumn.tasks.findIndex(t => t.id === sourceTaskId);
-        if (taskIndex === -1) return;
-      
-        const [movedTask] = sourceColumn.tasks.splice(taskIndex, 1);
-        
-        // Обновляем порядок задач в исходной колонке
-        sourceColumn.tasks.forEach((task, index) => {
-          task.order = index;
-        });
-      
-        // Вставляем задачу в целевую колонку
-        const insertIndex = targetColumn.tasks.length;
-        targetColumn.tasks.splice(insertIndex, 0, movedTask);
-        
-        // Обновляем порядок задач в целевой колонке
-        targetColumn.tasks.forEach((task, index) => {
-          task.order = index;
-        });
-      },
-
-      updateTaskStatus: (state, action: PayloadAction<{
-        projectId: string;
-        columnId: string;
-        taskId: string;
-        completed: boolean;
-      }>) => {
-        const { projectId, columnId, taskId, completed } = action.payload;
-        const project = state.projects.find(p => p.id === projectId);
-        
-        if (project) {
-          const column = project.columns.find(c => c.id === columnId);
-          if (column) {
-            const task = column.tasks.find(t => t.id === taskId);
-            if (task) {
-              task.completed = completed;
-              
-              // Если задача отмечена как выполненная, устанавливаем дату завершения
-              if (completed) {
-                task.completedAt = new Date().toISOString();
-              } else {
-                // Если задача снова помечена как невыполненная, убираем дату завершения
-                task.completedAt = undefined;
-              }
-            }
-          }
-        }
-      },
-
-      // Обновление описания задачи
-      updateTaskDescription: (state, action: PayloadAction<{
-        projectId: string;
-        columnId: string;
-        taskId: string;
-        description: string;
-      }>) => {
-        const { projectId, columnId, taskId, description } = action.payload;
-        const project = state.projects.find(p => p.id === projectId);
-        
-        if (project) {
-          const column = project.columns.find(c => c.id === columnId);
-          if (column) {
-            const task = column.tasks.find(t => t.id === taskId);
-            if (task) {
-              task.description = description;
-            }
-          }
-        }
-      },
-
-      // Редьюсеры для обновления дат задач
-      updateTaskDueDate: (state, action: PayloadAction<{
-        projectId: string;
-        columnId: string;
-        taskId: string;
-        dueDate?: string; // Может быть undefined для удаления дедлайна
-      }>) => {
-        const { projectId, columnId, taskId, dueDate } = action.payload;
-        const project = state.projects.find(p => p.id === projectId);
-        
-        if (project) {
-          const column = project.columns.find(c => c.id === columnId);
-          if (column) {
-            const task = column.tasks.find(t => t.id === taskId);
-            if (task) {
-              task.dueDate = dueDate;
-            }
-          }
-        }
-      },
-
-      setSearchQuery: (state, action: PayloadAction<string>) => {
-        state.filters.searchQuery = action.payload;
-      },
-      
-      toggleStatusFilter: (state, action: PayloadAction<'completed' | 'active'>) => {
-        state.filters.statusFilters[action.payload] = !state.filters.statusFilters[action.payload];
-      },
-      
-      toggleDueDateFilter: (state, action: PayloadAction<'overdue' | 'upcoming' | 'noDueDate'>) => {
-        state.filters.dueDateFilters[action.payload] = !state.filters.dueDateFilters[action.payload];
-      },
-      
-      setSortBy: (state, action: PayloadAction<'newest' | 'oldest' | 'dueDate' | 'alphabetical'>) => {
-        state.filters.sortBy = action.payload;
-      },
-      
-      resetFilters: (state) => {
-        state.filters = initialState.filters;
+      // Сбрасываем активный проект, если он был удален
+      if (state.activeProjectId === projectId) {
+        state.activeProjectId = null;
       }
-    }, 
-})
+    },
+    
+    // Редьюсеры для колонок
+    addColumn: (state, action: PayloadAction<{
+      projectId: string;
+      columnTitle: string;
+    }>) => {
+      const { projectId, columnTitle } = action.payload;
+      const dateId = Date.now().toString();
+      
+      // Определяем порядок новой колонки
+      const projectColumns = Object.values(state.columns)
+        .filter(column => column.projectId === projectId);
+      
+      const maxOrder = projectColumns.length > 0
+        ? Math.max(...projectColumns.map(c => c.order))
+        : -1;
+      
+      // Добавляем колонку
+      state.columns[dateId] = {
+        id: dateId,
+        projectId,
+        title: columnTitle,
+        order: maxOrder + 1,
+        createdAt: new Date().toISOString()
+      };
+    },
+    
+    deleteColumn: (state, action: PayloadAction<{
+      projectId: string;
+      columnId: string;
+    }>) => {
+      const { columnId } = action.payload;
+      
+      // Удаляем все задачи колонки
+      Object.values(state.tasks).forEach(task => {
+        if (task.columnId === columnId) {
+          delete state.tasks[task.id];
+        }
+      });
+      
+      // Удаляем колонку
+      delete state.columns[columnId];
+    },
+    
+    // Редьюсеры для задач
+    addTask: (state, action: PayloadAction<{
+      projectId: string;
+      columnId: string;
+      taskTitle: string;
+      dueDate?: string;
+    }>) => {
+      const { projectId, columnId, taskTitle, dueDate } = action.payload;
+      const taskId = Date.now().toString();
+      
+      // Определяем порядок новой задачи
+      const columnTasks = Object.values(state.tasks)
+        .filter(task => task.columnId === columnId);
+      
+      const maxOrder = columnTasks.length > 0
+        ? Math.max(...columnTasks.map(t => t.order))
+        : -1;
+      
+      // Добавляем задачу
+      state.tasks[taskId] = {
+        id: taskId,
+        columnId,
+        projectId,
+        title: taskTitle,
+        completed: false,
+        order: maxOrder + 1,
+        createdAt: new Date().toISOString(),
+        dueDate: dueDate
+      };
+    },
+    
+    deleteTask: (state, action: PayloadAction<{
+      projectId: string;
+      columnId: string;
+      taskId: string;
+    }>) => {
+      const { taskId } = action.payload;
+      
+      // Удаляем задачу
+      delete state.tasks[taskId];
+    },
+    
+    // Изменение названия проекта
+    updateProjectTitle: (state, action: PayloadAction<{
+      projectId: string;
+      newTitle: string;
+    }>) => {
+      const { projectId, newTitle } = action.payload;
+      
+      if (state.projects[projectId]) {
+        state.projects[projectId].title = newTitle;
+        state.projects[projectId].updatedAt = new Date().toISOString();
+      }
+    },
+    
+    // Изменение названия колонки
+    updateColumnTitle: (state, action: PayloadAction<{
+      projectId: string;
+      columnId: string;
+      newTitle: string;
+    }>) => {
+      const { columnId, newTitle } = action.payload;
+      
+      if (state.columns[columnId]) {
+        state.columns[columnId].title = newTitle;
+        state.columns[columnId].updatedAt = new Date().toISOString();
+      }
+    },
+    
+    // Изменение названия задачи
+    updateTaskTitle: (state, action: PayloadAction<{
+      projectId: string;
+      columnId: string;
+      taskId: string;
+      newTitle: string;
+    }>) => {
+      const { taskId, newTitle } = action.payload;
+      
+      if (state.tasks[taskId]) {
+        state.tasks[taskId].title = newTitle;
+      }
+    },
+    
+    // Перемещение задачи
+    moveTask: (state, action: PayloadAction<{
+      sourceProjectId: string;
+      sourceColumnId: string;
+      sourceTaskId: string;
+      targetProjectId: string;
+      targetColumnId: string;
+    }>) => {
+      const {
+        sourceTaskId,
+        targetColumnId,
+        targetProjectId
+      } = action.payload;
+      
+      const task = state.tasks[sourceTaskId];
+      
+      if (task) {
+        const oldColumnId = task.columnId;
+        
+        // Обновляем задачу
+        task.columnId = targetColumnId;
+        task.projectId = targetProjectId;
+        
+        // Пересчитываем порядки задач в исходной колонке
+        const sourceTasks = Object.values(state.tasks)
+          .filter(t => t.columnId === oldColumnId)
+          .sort((a, b) => a.order - b.order);
+        
+        sourceTasks.forEach((t, index) => {
+          state.tasks[t.id].order = index;
+        });
+        
+        // Вычисляем новый порядок для перемещенной задачи (в конец целевой колонки)
+        const targetTasks = Object.values(state.tasks)
+          .filter(t => t.columnId === targetColumnId && t.id !== sourceTaskId);
+        
+        task.order = targetTasks.length;
+      }
+    },
+    
+    // Обновление статуса задачи
+    updateTaskStatus: (state, action: PayloadAction<{
+      projectId: string;
+      columnId: string;
+      taskId: string;
+      completed: boolean;
+    }>) => {
+      const { taskId, completed } = action.payload;
+      
+      if (state.tasks[taskId]) {
+        state.tasks[taskId].completed = completed;
+        
+        // Если задача отмечена как выполненная, устанавливаем дату завершения
+        if (completed) {
+          state.tasks[taskId].completedAt = new Date().toISOString();
+        } else {
+          // Если задача снова помечена как невыполненная, убираем дату завершения
+          state.tasks[taskId].completedAt = undefined;
+        }
+      }
+    },
+    
+    // Обновление описания задачи
+    updateTaskDescription: (state, action: PayloadAction<{
+      projectId: string;
+      columnId: string;
+      taskId: string;
+      description: string;
+    }>) => {
+      const { taskId, description } = action.payload;
+      
+      if (state.tasks[taskId]) {
+        state.tasks[taskId].description = description;
+      }
+    },
+    
+    // Обновление дедлайна задачи
+    updateTaskDueDate: (state, action: PayloadAction<{
+      projectId: string;
+      columnId: string;
+      taskId: string;
+      dueDate?: string;
+    }>) => {
+      const { taskId, dueDate } = action.payload;
+      
+      if (state.tasks[taskId]) {
+        state.tasks[taskId].dueDate = dueDate;
+      }
+    },
+    
+    // Редьюсеры для фильтров (остаются без изменений)
+    setSearchQuery: (state, action: PayloadAction<string>) => {
+      state.filters.searchQuery = action.payload;
+    },
+    
+    toggleStatusFilter: (state, action: PayloadAction<'completed' | 'active'>) => {
+      state.filters.statusFilters[action.payload] = !state.filters.statusFilters[action.payload];
+    },
+    
+    toggleDueDateFilter: (state, action: PayloadAction<'overdue' | 'upcoming' | 'noDueDate'>) => {
+      state.filters.dueDateFilters[action.payload] = !state.filters.dueDateFilters[action.payload];
+    },
+    
+    setSortBy: (state, action: PayloadAction<'newest' | 'oldest' | 'dueDate' | 'alphabetical'>) => {
+      state.filters.sortBy = action.payload;
+    },
+    
+    resetFilters: (state) => {
+      state.filters = initialState.filters;
+    }
+  }
+});
 
 export const { 
   createProject,
@@ -387,5 +423,6 @@ export const {
   toggleDueDateFilter,
   setSortBy,
   resetFilters,
-} = boardSlice.actions
+} = boardSlice.actions;
+
 export default boardSlice.reducer;

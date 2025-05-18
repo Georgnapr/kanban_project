@@ -1,34 +1,54 @@
+// src/app/features/board/boardSelectors.ts
 import { RootState } from '../../store';
+import { IProject, IColumn, ITask } from '../../../types/entities';
 
-// Все проекты
-export const selectAllProjects = (state: RootState) => state.board.projects;
+// Селекторы для проектов
+export const selectAllProjects = (state: RootState): IProject[] => 
+  Object.values(state.board.projects);
 
-// Проект по ID
-export const selectProjectById = (state: RootState, projectId: string) => 
-  state.board.projects.find(project => project.id === projectId);
+export const selectProjectById = (state: RootState, projectId: string): IProject | undefined => 
+  state.board.projects[projectId];
 
-// Активный проект
-export const selectActiveProject = (state: RootState) => 
-  state.board.projects.find(p => p.id === state.board.activeProjectId);
+export const selectActiveProject = (state: RootState): IProject | undefined => {
+  const { activeProjectId } = state.board;
+  return activeProjectId ? state.board.projects[activeProjectId] : undefined;
+};
+
+// Селекторы для колонок
+export const selectColumnsByProjectId = (state: RootState, projectId: string): IColumn[] => 
+  Object.values(state.board.columns)
+    .filter(column => column.projectId === projectId)
+    .sort((a, b) => a.order - b.order);
+
+export const selectColumnById = (state: RootState, columnId: string): IColumn | undefined => 
+  state.board.columns[columnId];
+
+// Селекторы для задач
+export const selectTasksByColumnId = (state: RootState, columnId: string): ITask[] => 
+  Object.values(state.board.tasks)
+    .filter(task => task.columnId === columnId)
+    .sort((a, b) => a.order - b.order);
+
+export const selectTaskById = (state: RootState, taskId: string): ITask | undefined => 
+  state.board.tasks[taskId];
+
+export const selectTasksByProjectId = (state: RootState, projectId: string): ITask[] => 
+  Object.values(state.board.tasks)
+    .filter(task => task.projectId === projectId);
 
 // Селектор для получения текущих фильтров
 export const selectFilters = (state: RootState) => state.board.filters;
 
-// Селектор для получения отфильтрованных задач проекта
-export const selectFilteredTasks = (state: RootState, projectId: string, columnId: string) => {
-  const project = selectProjectById(state, projectId);
+// Селектор для получения отфильтрованных задач колонки
+export const selectFilteredTasks = (state: RootState, projectId: string, columnId: string): ITask[] => {
+  const tasks = selectTasksByColumnId(state, columnId);
   const filters = selectFilters(state);
   
-  if (!project) return [];
-  
-  const column = project.columns.find(c => c.id === columnId);
-  if (!column) return [];
-
-  // Проверим, активны ли вообще какие-либо фильтры
+  // Проверяем, активны ли вообще какие-либо фильтры
   const hasActiveStatusFilters = Object.values(filters.statusFilters).some(value => value);
   const hasActiveDueDateFilters = Object.values(filters.dueDateFilters).some(value => value);
   
-  return column.tasks.filter(task => {
+  return tasks.filter(task => {
     // Фильтрация по поиску
     const matchesSearch = !filters.searchQuery || 
       task.title.toLowerCase().includes(filters.searchQuery.toLowerCase()) ||
@@ -54,7 +74,7 @@ export const selectFilteredTasks = (state: RootState, projectId: string, columnI
     
     return matchesSearch && matchesStatus && matchesDueDate;
   }).sort((a, b) => {
-    // Сортировка в зависимости от выбранного параметра (без изменений)
+    // Сортировка в зависимости от выбранного параметра
     switch (filters.sortBy) {
       case 'newest':
         return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
@@ -73,7 +93,7 @@ export const selectFilteredTasks = (state: RootState, projectId: string, columnI
   });
 };
 
-// Обновите селектор активности фильтров
+// Обновленный селектор активности фильтров
 export const selectIsFiltersActive = (state: RootState) => {
   const filters = state.board.filters;
   return filters.searchQuery !== '' || 
@@ -84,13 +104,11 @@ export const selectIsFiltersActive = (state: RootState) => {
 
 // Подсчет количества отфильтрованных задач
 export const selectFilteredTasksCount = (state: RootState, projectId: string) => {
-  const project = selectProjectById(state, projectId);
-  
-  if (!project) return 0;
+  const columns = selectColumnsByProjectId(state, projectId);
   
   let totalFilteredTasks = 0;
   
-  project.columns.forEach(column => {
+  columns.forEach(column => {
     totalFilteredTasks += selectFilteredTasks(state, projectId, column.id).length;
   });
   
