@@ -1,12 +1,16 @@
 /* src/components/Board/Board.css */
 .board-container {
   width: 100%;
-  overflow-x: auto; /* Добавляем горизонтальную прокрутку */
+  overflow-x: auto; /* Горизонтальная прокрутка */
   padding-bottom: 15px; /* Место для скроллбара */
   margin-top: 30px;
+  height: calc(100vh - 170px); /* Высота экрана минус header + action-bar + отступы */
+  display: flex;
+  flex-direction: column;
 }
 
 .columns-container {
   display: flex;
   min-width: min-content; /* Гарантирует, что контейнер не будет меньше суммы ширин колонок */
+  height: 100%; /* Заполняет всю доступную высоту родителя */
 }

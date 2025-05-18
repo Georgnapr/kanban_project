@@ -1,20 +1,39 @@
-.projects-container{
-    display: flex;
-    flex-direction: row;
-    margin-left: 50px;
-    margin-top: 30px;
+/* src/pages/dashBoard/DashBoard.css */
+.dashboard-content {
+  transition: margin-left 0.3s ease;
+  margin-left: 60px; /* По умолчанию с учетом свернутой боковой панели */
+  width: calc(100% - 100px); /* По умолчанию для свернутой панели */
+  overflow-x: hidden;
 }
+
+/* Стиль при развернутой боковой панели */
+.dashboard-content.sidebar-expanded {
+  margin-left: 310px;
+  width: calc(100% - 350px); /* 300px боковая панель + 50px отступ справа */
+}
+
+.projects-container {
+  display: flex;
+  flex-direction: row;
+  margin-top: 30px;
+  flex-wrap: wrap; /* Позволяет элементам переноситься на новую строку */
+}
+
 .action-bar {
-    display: flex;
-    align-items: center;
-    height: 50px;
-    width: 100%;
-    font-weight: 400;
-    color: #2F5487;
-    border: 1px solid #2F5487;
-    border-width: 0px 0px 1px 0px;
+  display: flex;
+  align-items: center;
+  height: 50px;
+  width: 100%;
+  font-weight: 400;
+  color: #2F5487;
+  border: 1px solid #2F5487;
+  border-width: 0px 0px 1px 0px;
+  position: sticky;
+  top: 60px; /* Высота header */
+  background-color: white;
+  z-index: 5;
 }
 
 .action-bar-title {
-    margin-left: 50px;
+  margin-left: 50px;
 }

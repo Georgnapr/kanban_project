@@ -1,4 +1,4 @@
-// src/App.tsx с обновленной маршрутизацией
+// src/App.tsx с добавлением SidebarProvider
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { JSX, useEffect, useState } from 'react';
 import DashBoard from './pages/dashBoard/DashBoard';
@@ -6,6 +6,8 @@ import ProjectPage from './pages/projectPage/ProjectPage';
 import Login from './pages/auth/Login';
 import './App.css';
 import Header from './components/UI/Header/Header';
+import { SidebarProvider } from './context/SidebarContext'; 
+
 
 // Интерфейс пользователя
 interface User {
@@ -42,32 +44,34 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
 function App() {
   return (
     <Router>
-      <Header />
-      <Routes>
-        {/* Страница входа */}
-        <Route path="/login" element={<Login />} />
-        
-        {/* Защищенные маршруты */}
-        <Route 
-          path="/" 
-          element={
-            <ProtectedRoute>
-              <DashBoard />
-            </ProtectedRoute>
-          } 
-        />
-        <Route 
-          path="/projects/:projectId" 
-          element={
-            <ProtectedRoute>
-              <ProjectPage />
-            </ProtectedRoute>
-          } 
-        />
-        
-        {/* Перенаправление на страницу входа по умолчанию */}
-        <Route path="*" element={<Navigate to="/login" />} />
-      </Routes>
+      <SidebarProvider>  {/* Оборачиваем все приложение */}
+        <Header />
+        <Routes>
+          {/* Страница входа */}
+          <Route path="/login" element={<Login />} />
+          
+          {/* Защищенные маршруты */}
+          <Route 
+            path="/" 
+            element={
+              <ProtectedRoute>
+                <DashBoard />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/projects/:projectId" 
+            element={
+              <ProtectedRoute>
+                <ProjectPage />
+              </ProtectedRoute>
+            } 
+          />
+          
+          {/* Перенаправление на страницу входа по умолчанию */}
+          <Route path="*" element={<Navigate to="/login" />} />
+        </Routes>
+      </SidebarProvider>
     </Router>
   );
 }

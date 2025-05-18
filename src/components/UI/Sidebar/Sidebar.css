@@ -1,17 +1,18 @@
-/* src/components/Sidebar/Sidebar.css */
+/* src/components/UI/Sidebar/Sidebar.css */
 body {
-  overflow-x: hidden; /* Предотвращаем горизонтальную прокрутку всей страницы */
+  overflow-x: hidden;
 }
 
 .sidebar {
   position: fixed;
-  top: 110px; /* Высота header + action-bar */
+  top: 110px;
   left: 0;
   height: calc(100vh - 110px);
+  border-top: 1px solid #2F5487;
   border-right: 1px solid #2F5487;
   transition: width 0.3s ease;
   z-index: 10;
-  
+  background-color: white;
 }
 
 .sidebar.collapsed {
@@ -22,7 +23,7 @@ body {
   width: 300px;
 }
 
-/* Кнопка переключения - ключевой элемент */
+/* Кнопка переключения */
 .toggle-button {
   position: absolute;
   top: 10px;
@@ -49,17 +50,13 @@ body {
 .sidebar-content {
   height: 100%;
   overflow: hidden;
-}
-
-/* Стили для развернутого меню */
-.full-menu {
-  width: 100%;
-  padding: 10px;
+  display: flex;
+  flex-direction: column;
   padding-top: 50px; /* Место для кнопки переключения */
 }
 
 .sidebar-header {
-  margin-bottom: 20px;
+  margin: 0 15px 20px 15px;
   padding-bottom: 10px;
   border-bottom: 1px solid #D2E5FF;
 }
@@ -74,14 +71,18 @@ body {
   display: flex;
   flex-direction: column;
   gap: 5px;
+  padding: 0 5px;
 }
 
+/* Унифицированный стиль для всех элементов меню, включая ссылки */
 .sidebar-item {
   display: flex;
   align-items: center;
   padding: 10px;
-  cursor: pointer;
   border-radius: 5px;
+  text-decoration: none;
+  cursor: pointer;
+  color: #2F5487;
   transition: background-color 0.2s;
 }
 
@@ -89,54 +90,38 @@ body {
   background-color: #D2E5FF;
 }
 
-.sidebar-icon {
+/* Обертка для иконки - обеспечивает фиксированный размер и центрирование */
+.sidebar-icon-wrapper {
   width: 24px;
   height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-right: 15px;
+  flex-shrink: 0; /* Предотвращает сжатие при изменении размеров */
 }
 
-.sidebar-label {
-  font-family: 'Montserrat';
-  color: #2F5487;
-}
-
-/* Стили для иконок в свернутом режиме */
-.icons-menu {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 50px; /* Место для кнопки переключения */
-  gap: 15px;
-}
-
-.sidebar-icon-item {
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  border-radius: 5px;
-  transition: background-color 0.2s;
-}
-
-.sidebar-icon-item:hover {
-  background-color: #D2E5FF;
-}
-
-/* Стили для SVG-иконок в развернутом режиме */
-.svg-icon {
-  width: 24px;
-  height: 24px;
-  object-fit: contain;
-}
-
-/* Стили для SVG-иконок в свернутом режиме */
-.svg-icon-small {
+/* Унифицированный стиль для иконок */
+.sidebar-icon-img {
   width: 20px;
   height: 20px;
   object-fit: contain;
+}
+
+/* Стиль для текстовой метки */
+.sidebar-label {
+  font-family: 'Montserrat';
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* В свернутом режиме корректируем отступы */
+.sidebar.collapsed .sidebar-item {
+  padding: 10px 0;
+  justify-content: center;
+}
+
+.sidebar.collapsed .sidebar-icon-wrapper {
+  margin-right: 0;
 }

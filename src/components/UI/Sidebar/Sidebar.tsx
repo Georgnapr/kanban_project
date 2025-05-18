@@ -1,75 +1,80 @@
-// src/components/Sidebar/Sidebar.tsx
-import React, { useState } from 'react';
+// src/components/UI/Sidebar/Sidebar.tsx
+import React from 'react';
+import { useNavigate } from 'react-router-dom'; 
 import './Sidebar.css';
+import { useSidebar } from '../../../context/SidebarContext';
 
-// Предполагаемые пути к иконкам в папке public
+// Импортируем SVG иконки напрямую
+// Обратите внимание, что мы используем относительные пути к иконкам в public
 const icons = {
-    home: '/public/Home.svg',
-    favorites: '/public/Star.svg',
-    calendar: '/public/Calendar.svg',
+    home: "Home.svg",       // Без preffix /public
+    favorites: "Star.svg",
+    calendar: "Calendar.svg",
 };
 
-interface SidebarProps {
-  onToggle: (expanded: boolean) => void;
+interface MenuItem {
+  id: string;
+  title: string;
+  icon: string;
+  path?: string;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ onToggle }) => {
-  const [expanded, setExpanded] = useState(false);
-
-  const handleToggle = () => {
-    const newExpandedState = !expanded;
-    setExpanded(newExpandedState);
-    onToggle(newExpandedState);
-  };
+const Sidebar: React.FC = () => {
+  const { expanded, toggleSidebar } = useSidebar();
+  const navigate = useNavigate(); // Хук для программной навигации
 
   // Массив с данными для элементов меню
-  const menuItems = [
-    { id: 'home', title: 'Домой', icon: icons.home },
+  const menuItems: MenuItem[] = [
+    { id: 'home', title: 'Домой', icon: icons.home, path: '/' },
     { id: 'favorites', title: 'Избранное', icon: icons.favorites },
     { id: 'calendar', title: 'Календарь', icon: icons.calendar },
   ];
+
+  // Функция для навигации при клике
+  const handleItemClick = (path?: string) => {
+    if (path) {
+      navigate(path);
+    }
+  };
 
   return (
     <div className={`sidebar ${expanded ? 'expanded' : 'collapsed'}`}>
       {/* Кнопка переключения */}
       <button 
         className="toggle-button" 
-        onClick={handleToggle}
+        onClick={toggleSidebar}
         title={expanded ? "Свернуть" : "Развернуть"}
       >
         {expanded ? '◀' : '▶'}
       </button>
 
       <div className="sidebar-content">
-        {/* Содержимое при развернутом состоянии */}
         {expanded && (
-          <div className="full-menu">
-            <div className="sidebar-header">
-              <h3>Категории</h3>
-            </div>
-            <div className="sidebar-menu">
-              {menuItems.map(item => (
-                <div key={item.id} className="sidebar-item">
-                  <div className="sidebar-icon">
-                    <img src={item.icon} alt={item.title} className="svg-icon" />
-                  </div>
-                  <span className="sidebar-label">{item.title}</span>
-                </div>
-              ))}
-            </div>
+          <div className="sidebar-header">
+            <h3>Категории</h3>
           </div>
         )}
         
-        {/* Содержимое при свернутом состоянии */}
-        {!expanded && (
-          <div className="icons-menu">
-            {menuItems.map(item => (
-              <div key={item.id} className="sidebar-icon-item" title={item.title}>
-                <img src={item.icon} alt={item.title} className="svg-icon-small" />
+        <nav className="sidebar-menu">
+          {menuItems.map(item => (
+            <div 
+              key={item.id}
+              className="sidebar-item" 
+              title={!expanded ? item.title : undefined}
+              onClick={() => handleItemClick(item.path)}
+              style={{ cursor: item.path ? 'pointer' : 'default' }}
+            >
+              <div className="sidebar-icon-wrapper">
+                <img
+                  src={`/${item.icon}`} // Добавляем / впереди для доступа из корня
+                  alt={item.title}
+                  className="sidebar-icon-img"
+                />
               </div>
-            ))}
-          </div>
-        )}
+              {expanded && <span className="sidebar-label">{item.title}</span>}
+            </div>
+          ))}
+        </nav>
       </div>
     </div>
   );

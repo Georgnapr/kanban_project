@@ -40,8 +40,6 @@ function Header() {
       <div className='burger'></div>
       <img src={logoSvg} alt="TaskZen Logo" className="logo" />
       <span className='project-title'>ZenTask</span>
-      <span className='project-menu'>Избранное</span>
-      <span className='project-menu'>Недавние</span>
       {user && (
         <div className="user-section">
           <span className="username">{user.username}</span>
