@@ -7,7 +7,7 @@ import Login from './pages/auth/Login';
 import './App.css';
 import Header from './components/UI/Header/Header';
 import { SidebarProvider } from './context/SidebarContext'; 
-
+import CalendarPage from './pages/calendar/CalendarPage';
 
 // Интерфейс пользователя
 interface User {
@@ -64,6 +64,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <ProjectPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/calendar" 
+            element={
+              <ProtectedRoute>
+                <CalendarPage />
               </ProtectedRoute>
             } 
           />

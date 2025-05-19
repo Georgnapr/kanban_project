@@ -1,0 +1,63 @@
+/* src/components/Calendar/TaskCalendar.css */
+.task-calendar-container {
+  padding: 20px;
+  
+  height: calc(100vh - 171px);
+  color: #2F5487;
+  background-color: white;
+  border-radius: 10px;
+  overflow-y: auto;
+}
+
+/* Адаптация стилей FullCalendar к дизайну приложения */
+.fc {
+  font-family: 'Montserrat', sans-serif;
+  max-height: 100%;
+}
+
+.fc .fc-toolbar-title {
+  font-size: 1.5em;
+  color: #2F5487;
+}
+
+.fc .fc-button-primary {
+  background-color: #8EBCFE;
+  border-color: #8EBCFE;
+  color: white;
+}
+
+.fc .fc-button-primary:hover {
+  background-color: #5795ED;
+  border-color: #5795ED;
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active, 
+.fc .fc-button-primary:not(:disabled):active {
+  background-color: #5795ED;
+  border-color: #5795ED;
+}
+
+.fc .fc-daygrid-day.fc-day-today {
+  background-color: rgba(142, 188, 254, 0.1);
+}
+
+.fc .fc-col-header-cell {
+  background-color: #D2E5FF;
+}
+
+.fc .fc-col-header-cell-cushion {
+  color: #2F5487;
+  text-decoration: none;
+  padding: 8px;
+}
+
+.fc .fc-daygrid-day-number {
+  color: #2F5487;
+  text-decoration: none;
+  padding: 8px;
+}
+
+/* Исправление отступов в контейнере */
+.task-calendar-container .fc-view-harness {
+  margin: 10px 0;
+}

@@ -27,7 +27,7 @@ const Sidebar: React.FC = () => {
   const menuItems: MenuItem[] = [
     { id: 'home', title: 'Домой', icon: icons.home, path: '/' },
     { id: 'favorites', title: 'Избранное', icon: icons.favorites },
-    { id: 'calendar', title: 'Календарь', icon: icons.calendar },
+    { id: 'calendar', title: 'Календарь', icon: icons.calendar, path: '/calendar' },
   ];
 
   // Функция для навигации при клике

@@ -1,0 +1,14 @@
+/* src/pages/calendar/CalendarPage.css */
+.calendar-page {
+  transition: margin-left 0.3s ease;
+  margin-left: 60px; /* По умолчанию с учетом свернутой боковой панели */
+  width: calc(100% - 100px); /* По умолчанию для свернутой панели */
+  overflow-x: hidden;
+  margin-top: 20px;
+}
+
+/* Стиль при развернутой боковой панели */
+.calendar-page.sidebar-expanded {
+  margin-left: 310px;
+  width: calc(100% - 350px); /* 300px боковая панель + 50px отступ справа */
+}
