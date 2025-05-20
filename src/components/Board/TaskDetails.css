@@ -213,3 +213,185 @@
   color: #2F5487;
   cursor: pointer;
 }
+
+/* Стили для селекторов важности и сложности */
+.task-details-importance,
+.task-details-complexity,
+.task-details-priority {
+  margin-bottom: 20px;
+}
+
+.importance-selector,
+.complexity-selector {
+  display: flex;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.importance-button,
+.complexity-button {
+  width: 36px;
+  height: 36px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background-color: white;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.importance-button:hover,
+.complexity-button:hover {
+  background-color: #f0f0f0;
+}
+
+/* Стили для кнопок важности */
+.importance-button.active[title="Lowest"],
+.importance-button.active:nth-child(1) {
+  background-color: #95a5a6;
+  color: white;
+  border-color: #7f8c8d;
+}
+
+.importance-button.active[title="Low"],
+.importance-button.active:nth-child(2) {
+  background-color: #2ecc71;
+  color: white;
+  border-color: #27ae60;
+}
+
+.importance-button.active[title="Medium"],
+.importance-button.active:nth-child(3) {
+  background-color: #edc900;
+  color: white;
+  border-color: #ba9e00;
+}
+
+.importance-button.active[title="High"],
+.importance-button.active:nth-child(4) {
+  background-color: #f39c12;
+  color: white;
+  border-color: #e67e22;
+}
+
+.importance-button.active[title="Highest"],
+.importance-button.active:nth-child(5) {
+  background-color: #e74c3c;
+  color: white;
+  border-color: #c0392b;
+}
+
+/* Стили для кнопок сложности */
+.complexity-button.active[title="VerySimple"],
+.complexity-button.active:nth-child(1) {
+  background-color: #95a5a6;
+  color: white;
+  border-color: #7f8c8d;
+}
+
+.complexity-button.active[title="Simple"],
+.complexity-button.active:nth-child(2) {
+  background-color: #2ecc71;
+  color: white;
+  border-color: #27ae60;
+}
+
+.complexity-button.active[title="Medium"],
+.complexity-button.active:nth-child(3) {
+  background-color: #edc900;
+  color: white;
+  border-color: #ba9e00;
+}
+
+.complexity-button.active[title="Complex"],
+.complexity-button.active:nth-child(4) {
+  background-color: #f39c12;
+  color: white;
+  border-color: #e67e22;
+}
+
+.complexity-button.active[title="VeryComplex"],
+.complexity-button.active:nth-child(5) {
+  background-color: #e74c3c;
+  color: white;
+  border-color: #c0392b;
+}
+
+.selector-label {
+  margin-top: 5px;
+  font-size: 14px;
+  color: #666;
+}
+
+/* Стили для индикатора приоритета */
+.priority-indicator {
+  height: 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  overflow: hidden;
+  margin: 10px 0;
+  background-color: #f5f5f5;
+}
+
+.priority-bar {
+  height: 100%;
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.priority-value {
+  font-size: 14px;
+  font-weight: 500;
+  margin-top: 5px;
+}
+
+/* Стили для переключателя режима приоритета */
+.task-details-priority-mode {
+  margin-bottom: 20px;
+}
+
+.priority-mode-switch {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.priority-mode-switch label {
+  margin-left: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #2F5487;
+}
+
+/* Стили для выбора ручного приоритета */
+.task-details-manual-priority {
+  margin-bottom: 20px;
+}
+
+.manual-priority-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.priority-button {
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background-color: white;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.priority-button:hover {
+  background-color: #f0f0f0;
+}
+
+.priority-button.active {
+  font-weight: 500;
+}

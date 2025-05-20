@@ -18,21 +18,36 @@ export interface IColumn {
   updatedAt?: string;
 }
 
+export enum PriorityLevel {
+  NotSet = 'Не задан',        // Не задан (серый)
+  Low = 'Низкий',              // Низкий (зеленый)
+  Medium = 'Средний',        // Средний (синий)
+  High = 'High',            // Высокий (оранжевый)
+  Critical = 'Критический'     // Критический (красный)
+}
+
 // Задача
 export interface ITask {
   id: string;
-  columnId: string;   // Ссылка на родительскую колонку
-  projectId: string;  // Ссылка на проект для упрощения запросов
+  columnId: string;
+  projectId: string;
   title: string;
   description?: string;
   completed?: boolean;
-  order: number;      // Для сортировки задач в колонке
+  order: number;
   createdAt: string;
   dueDate?: string;
   completedAt?: string;
+  
+  // Поля для системы приоритизации
+  importance: number;                        // Субъективная важность (1-5)
+  complexity: number;                        // Сложность задачи (1-5)
+  // Упрощенная модель приоритета
+  useAutoPriority: boolean;       // Использовать автоматический расчет?
+  priorityLevel: PriorityLevel;   // Уровень приоритета (вычисленный или заданный вручную)
 }
 
-// Структура фильтров (остается без изменений)
+// Структура фильтров 
 export interface FilterState {
   searchQuery: string;
   statusFilters: {
@@ -44,5 +59,5 @@ export interface FilterState {
     upcoming: boolean;
     noDueDate: boolean;
   };
-  sortBy: 'newest' | 'oldest' | 'dueDate' | 'alphabetical';
+  sortBy: 'newest' | 'oldest' | 'dueDate' | 'alphabetical' | 'priority';
 }

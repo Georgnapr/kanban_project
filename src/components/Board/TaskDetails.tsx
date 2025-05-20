@@ -1,16 +1,29 @@
-// Обновленный TaskDetails.tsx с поддержкой дат
+// src/components/Board/TaskDetails.tsx
 import { useState, useEffect } from 'react';
-import { ITask } from "../../types/entities";
+import { ITask, PriorityLevel } from "../../types/entities";
 import { useAppDispatch } from '../../app/hooks';
 import { 
   updateTaskTitle, 
   updateTaskDescription, 
   updateTaskStatus,
-  updateTaskDueDate 
+  updateTaskDueDate, 
+  updateTaskImportance,
+  updateTaskComplexity,
+  toggleTaskPriorityMode,
+  updateTaskManualPriority
 } from '../../app/features/board/boardSlice';
 import './TaskDetails.css';
 import RoundCheckbox from '../UI/RoundCheckbox/RoundCheckbox';
 import Button from '../UI/Button/Button';
+import { 
+  ComplexityLevel, 
+  ImportanceLevel, 
+  getPriorityColor, 
+  getPriorityLabel, 
+  getPriorityValue,
+  getTaskPriority,
+  getAllPriorityLevels
+} from '../../utils/priorityCalculator';
 
 interface TaskDetailsProps {
   task: ITask;
@@ -28,7 +41,7 @@ const TaskDetails = ({ task, projectId, columnId, onClose }: TaskDetailsProps) =
   const [isDescriptionEditing, setIsDescriptionEditing] = useState(false);
   const [isDueDateEditing, setIsDueDateEditing] = useState(false);
   const [hasDueDate, setHasDueDate] = useState(Boolean(task.dueDate));
-
+  
   // Обновляем локальное состояние, если значения в Redux изменились
   useEffect(() => {
     setTitle(task.title);
@@ -36,6 +49,45 @@ const TaskDetails = ({ task, projectId, columnId, onClose }: TaskDetailsProps) =
     setDueDate(task.dueDate || '');
     setHasDueDate(Boolean(task.dueDate));
   }, [task.title, task.description, task.dueDate]);
+
+  // Обработчики для важности и сложности
+  const handleImportanceChange = (importance: number) => {
+    dispatch(updateTaskImportance({
+      projectId,
+      columnId,
+      taskId: task.id,
+      importance
+    }));
+  };
+
+  const handleComplexityChange = (complexity: number) => {
+    dispatch(updateTaskComplexity({
+      projectId,
+      columnId,
+      taskId: task.id,
+      complexity
+    }));
+  };
+  
+  // Обработчик переключения режима приоритета
+  const handlePriorityModeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(toggleTaskPriorityMode({
+      projectId,
+      columnId,
+      taskId: task.id,
+      useAutoPriority: e.target.checked
+    }));
+  };
+  
+  // Обработчик изменения ручного приоритета
+  const handleManualPriorityChange = (priorityLevel: PriorityLevel) => {
+    dispatch(updateTaskManualPriority({
+      projectId,
+      columnId,
+      taskId: task.id,
+      priorityLevel
+    }));
+  };
 
   // Форматирование даты для input type="datetime-local" с сохранением часового пояса
   const formatDateForInput = (dateString: string): string => {
@@ -137,6 +189,15 @@ const TaskDetails = ({ task, projectId, columnId, onClose }: TaskDetailsProps) =
     if (isDueDatePassed()) return 'overdue';
     return '';
   };
+
+  // Получаем информацию о приоритете
+  const currentPriorityLevel = getTaskPriority(task);
+  const priorityColor = getPriorityColor(currentPriorityLevel);
+  const priorityLabel = getPriorityLabel(currentPriorityLevel);
+  const priorityValue = getPriorityValue(task);
+  
+  // Получаем все возможные уровни приоритета для выбора
+  const allPriorityLevels = getAllPriorityLevels();
 
   return (
     <div className="task-details-overlay" onClick={onClose}>
@@ -251,7 +312,96 @@ const TaskDetails = ({ task, projectId, columnId, onClose }: TaskDetailsProps) =
             />
             <span>{task.completed ? "Завершено" : "В процессе"}</span>
           </div>
+                    
+          {/* Блок важности задачи */}
+          <div className="task-details-importance">
+            <h3>Важность:</h3>
+            <div className="importance-selector">
+              {[1, 2, 3, 4, 5].map(level => (
+                <button
+                  key={level}
+                  className={`importance-button ${task.importance === level ? 'active' : ''}`}
+                  onClick={() => handleImportanceChange(level)}
+                >
+                  {level}
+                </button>
+              ))}
+            </div>
+            <p className="selector-label">
+              {ImportanceLevel[task.importance || 3]}
+            </p>
+          </div>
           
+          {/* Блок сложности задачи */}
+          <div className="task-details-complexity">
+            <h3>Сложность:</h3>
+            <div className="complexity-selector">
+              {[1, 2, 3, 4, 5].map(level => (
+                <button
+                  key={level}
+                  className={`complexity-button ${task.complexity === level ? 'active' : ''}`}
+                  onClick={() => handleComplexityChange(level)}
+                >
+                  {level}
+                </button>
+              ))}
+            </div>
+            <p className="selector-label">
+              {ComplexityLevel[task.complexity || 3]}
+            </p>
+          </div>
+          
+          {/* Переключатель режима приоритета */}
+          <div className="task-details-priority-mode">
+            <h3>Режим приоритета:</h3>
+            <div className="priority-mode-switch">
+              <RoundCheckbox
+                checked={task.useAutoPriority}
+                onChange={handlePriorityModeChange}
+                stopPropagation={false}
+              />
+              <label>Автоматический расчет приоритета</label>
+            </div>
+          </div>
+          
+          {/* Ручной выбор приоритета (если автоматический режим отключен) */}
+          {!task.useAutoPriority && (
+            <div className="task-details-manual-priority">
+              <h3>Ручной приоритет:</h3>
+              <div className="manual-priority-selector">
+                {allPriorityLevels.map(level => (
+                  <button
+                    key={level}
+                    className={`priority-button ${task.priorityLevel === level ? 'active' : ''}`}
+                    onClick={() => handleManualPriorityChange(level)}
+                    style={task.priorityLevel === level ? { backgroundColor: getPriorityColor(level), color: 'white' } : {}}
+                  >
+                    {getPriorityLabel(level)}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+          
+          {/* Блок отображения приоритета */}
+          {!task.completed && (
+            <div className="task-details-priority">
+              <h3>{task.useAutoPriority ? 'Расчетный приоритет:' : 'Приоритет:'}</h3>
+              <div className="priority-indicator" style={{ borderColor: priorityColor }}>
+                <div 
+                  className="priority-bar" 
+                  style={{ 
+                    width: `${priorityValue}%`,
+                    backgroundColor: priorityColor 
+                  }}
+                ></div>
+              </div>
+              <p className="priority-value" style={{ color: priorityColor }}>
+                {priorityLabel} {task.useAutoPriority && `(${priorityValue})`}
+              </p>
+            </div>
+          )}
+
           {/* Описание */}
           <div className="task-details-description">
             <h3>Описание:</h3>

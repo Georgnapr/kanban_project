@@ -1,7 +1,11 @@
 // src/app/features/board/boardSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { BoardState } from './boardTypes';
-import { IColumn, ITask } from '../../../types/entities';
+import {ITask, PriorityLevel } from '../../../types/entities';
+import { 
+  calculatePriorityLevel, 
+  calculateTaskPriorityValue 
+} from '../../../utils/priorityCalculator';
 
 // Начальное состояние с плоской структурой
 const initialState: BoardState = {
@@ -47,7 +51,11 @@ const initialState: BoardState = {
       projectId: '1',
       title: 'Верстка лендинга',
       order: 0,
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
+      importance: 3,
+      complexity: 3,
+      useAutoPriority: false,
+      priorityLevel: PriorityLevel.NotSet
     },
     '2': {
       id: '2',
@@ -55,7 +63,11 @@ const initialState: BoardState = {
       projectId: '1',
       title: 'Верстка dashboard',
       order: 1,
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
+      importance: 3,
+      complexity: 3,
+      useAutoPriority: false,
+      priorityLevel: PriorityLevel.NotSet
     },
     '3': {
       id: '3',
@@ -63,7 +75,11 @@ const initialState: BoardState = {
       projectId: '1',
       title: 'Верстка стр. регистрации',
       order: 2,
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
+      importance: 3,
+      complexity: 3,
+      useAutoPriority: false,
+      priorityLevel: PriorityLevel.NotSet
     },
     '4': {
       id: '4',
@@ -71,7 +87,11 @@ const initialState: BoardState = {
       projectId: '2',
       title: 'Верстка лендинга моб.',
       order: 0,
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
+      importance: 3,
+      complexity: 3,
+      useAutoPriority: false,
+      priorityLevel: PriorityLevel.NotSet
     },
     '5': {
       id: '5',
@@ -79,7 +99,11 @@ const initialState: BoardState = {
       projectId: '2',
       title: 'Верстка dashboard моб.',
       order: 1,
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
+      importance: 3,
+      complexity: 3,
+      useAutoPriority: false,
+      priorityLevel: PriorityLevel.NotSet
     }
   },
   activeProjectId: null,
@@ -214,8 +238,10 @@ const boardSlice = createSlice({
       columnId: string;
       taskTitle: string;
       dueDate?: string;
+      importance?: number;
+      complexity?: number;
     }>) => {
-      const { projectId, columnId, taskTitle, dueDate } = action.payload;
+      const { projectId, columnId, taskTitle, dueDate, importance = 3, complexity = 3 } = action.payload;
       const taskId = Date.now().toString();
       
       // Определяем порядок новой задачи
@@ -226,8 +252,8 @@ const boardSlice = createSlice({
         ? Math.max(...columnTasks.map(t => t.order))
         : -1;
       
-      // Добавляем задачу
-      state.tasks[taskId] = {
+      // Создаем новую задачу
+      const newTask: ITask = {
         id: taskId,
         columnId,
         projectId,
@@ -235,8 +261,19 @@ const boardSlice = createSlice({
         completed: false,
         order: maxOrder + 1,
         createdAt: new Date().toISOString(),
-        dueDate: dueDate
+        dueDate,
+        importance,
+        complexity,
+        useAutoPriority: false,
+        priorityLevel: PriorityLevel.NotSet
       };
+      
+      // Рассчитываем приоритет для новой задачи
+      const priorityValue = calculateTaskPriorityValue(newTask);
+      newTask.priorityLevel = calculatePriorityLevel(priorityValue);
+      
+      // Добавляем задачу
+      state.tasks[taskId] = newTask;
     },
     
     deleteTask: (state, action: PayloadAction<{
@@ -350,6 +387,12 @@ const boardSlice = createSlice({
           // Если задача снова помечена как невыполненная, убираем дату завершения
           state.tasks[taskId].completedAt = undefined;
         }
+        
+        // Обновляем приоритет
+        if (state.tasks[taskId].useAutoPriority) {
+          const priorityValue = calculateTaskPriorityValue(state.tasks[taskId]);
+          state.tasks[taskId].priorityLevel = calculatePriorityLevel(priorityValue);
+        }
       }
     },
     
@@ -378,10 +421,106 @@ const boardSlice = createSlice({
       
       if (state.tasks[taskId]) {
         state.tasks[taskId].dueDate = dueDate;
+        
+        // Обновляем приоритет, если используется автоматический расчет
+        if (state.tasks[taskId].useAutoPriority) {
+          const priorityValue = calculateTaskPriorityValue(state.tasks[taskId]);
+          state.tasks[taskId].priorityLevel = calculatePriorityLevel(priorityValue);
+        }
       }
     },
     
-    // Редьюсеры для фильтров (остаются без изменений)
+    // НОВЫЕ РЕДЬЮСЕРЫ ДЛЯ СИСТЕМЫ ПРИОРИТИЗАЦИИ
+    
+    // Обновление важности задачи
+    updateTaskImportance: (state, action: PayloadAction<{
+      projectId: string;
+      columnId: string;
+      taskId: string;
+      importance: number;
+    }>) => {
+      const { taskId, importance } = action.payload;
+      
+      if (state.tasks[taskId]) {
+        state.tasks[taskId].importance = importance;
+        
+        // Обновляем приоритет, если используется автоматический расчет
+        if (state.tasks[taskId].useAutoPriority) {
+          const priorityValue = calculateTaskPriorityValue(state.tasks[taskId]);
+          state.tasks[taskId].priorityLevel = calculatePriorityLevel(priorityValue);
+        }
+      }
+    },
+    
+    // Обновление сложности задачи
+    updateTaskComplexity: (state, action: PayloadAction<{
+      projectId: string;
+      columnId: string;
+      taskId: string;
+      complexity: number;
+    }>) => {
+      const { taskId, complexity } = action.payload;
+      
+      if (state.tasks[taskId]) {
+        state.tasks[taskId].complexity = complexity;
+        
+        // Обновляем приоритет, если используется автоматический расчет
+        if (state.tasks[taskId].useAutoPriority) {
+          const priorityValue = calculateTaskPriorityValue(state.tasks[taskId]);
+          state.tasks[taskId].priorityLevel = calculatePriorityLevel(priorityValue);
+        }
+      }
+    },
+    
+    // Переключение режима расчета приоритета
+    toggleTaskPriorityMode: (state, action: PayloadAction<{
+      projectId: string;
+      columnId: string;
+      taskId: string;
+      useAutoPriority: boolean;
+    }>) => {
+      const { taskId, useAutoPriority } = action.payload;
+      
+      if (state.tasks[taskId]) {
+        state.tasks[taskId].useAutoPriority = useAutoPriority;
+        
+        // Если включен автоматический расчет, пересчитываем приоритет
+        if (useAutoPriority) {
+          const priorityValue = calculateTaskPriorityValue(state.tasks[taskId]);
+          state.tasks[taskId].priorityLevel = calculatePriorityLevel(priorityValue);
+        }
+        // При переключении в ручной режим, приоритет остается текущим
+      }
+    },
+    
+    // Установка ручного приоритета задачи
+    updateTaskManualPriority: (state, action: PayloadAction<{
+      projectId: string;
+      columnId: string;
+      taskId: string;
+      priorityLevel: PriorityLevel;
+    }>) => {
+      const { taskId, priorityLevel } = action.payload;
+      
+      if (state.tasks[taskId]) {
+        state.tasks[taskId].priorityLevel = priorityLevel;
+      }
+    },
+    
+    // Пересчет приоритетов всех задач
+    recalculateAllTaskPriorities: (state) => {
+      Object.keys(state.tasks).forEach(taskId => {
+        const task = state.tasks[taskId];
+        
+        // Пересчитываем только для задач с автоматическим режимом
+        if (task.useAutoPriority) {
+          const priorityValue = calculateTaskPriorityValue(task);
+          task.priorityLevel = calculatePriorityLevel(priorityValue);
+        }
+      });
+    },
+    
+    // Редьюсеры для фильтров
     setSearchQuery: (state, action: PayloadAction<string>) => {
       state.filters.searchQuery = action.payload;
     },
@@ -394,7 +533,7 @@ const boardSlice = createSlice({
       state.filters.dueDateFilters[action.payload] = !state.filters.dueDateFilters[action.payload];
     },
     
-    setSortBy: (state, action: PayloadAction<'newest' | 'oldest' | 'dueDate' | 'alphabetical'>) => {
+    setSortBy: (state, action: PayloadAction<'newest' | 'oldest' | 'dueDate' | 'alphabetical' | 'priority'>) => {
       state.filters.sortBy = action.payload;
     },
     
@@ -423,6 +562,13 @@ export const {
   toggleDueDateFilter,
   setSortBy,
   resetFilters,
+  
+  // Новые действия для приоритизации
+  updateTaskImportance,
+  updateTaskComplexity,
+  toggleTaskPriorityMode,
+  updateTaskManualPriority,
+  recalculateAllTaskPriorities
 } = boardSlice.actions;
 
 export default boardSlice.reducer;

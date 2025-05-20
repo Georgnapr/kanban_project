@@ -3,6 +3,7 @@ import './TaskCard.css'
 import { ITask } from "../../types/entities"
 import { useAppDispatch } from '../../app/hooks';
 import { deleteTask, updateTaskTitle, updateTaskStatus } from '../../app/features/board/boardSlice';
+import { getPriorityColor, getPriorityLabel } from '../../utils/priorityCalculator';
 import DropdownMenu from '../UI/DropDownMenu/DropDownMenu';
 import { useDrag } from 'react-dnd';
 import { useState } from 'react';
@@ -26,6 +27,11 @@ const TaskCard = ({taskcard, projectId, columnId }: Props) => {
       isDragging: !!monitor.isDragging(),
     }),
   }));
+
+  // Получаем цвет и метку приоритета
+  const priorityColor = getPriorityColor(taskcard.priorityLevel || 0);
+  const priorityLabel = getPriorityLabel(taskcard.priorityLevel || 0);
+  const priorityTooltip = `Приоритет: ${priorityLabel} (${taskcard.priorityLevel || 0})`;
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newStatus = e.target.checked;
@@ -71,6 +77,7 @@ const TaskCard = ({taskcard, projectId, columnId }: Props) => {
         className={`task-card ${taskcard.completed ? 'task-completed' : ''}`}
         onClick={handleTaskCardClick}
       >
+        
         <div className="task-card-content">
           <div className="task-card-header">
             <RoundCheckbox 
@@ -95,7 +102,7 @@ const TaskCard = ({taskcard, projectId, columnId }: Props) => {
           </div>
           
           {/* Индикаторы только при наличии описания или срока */}
-          {(taskcard.description || taskcard.dueDate) && (
+          {(taskcard.description || taskcard.dueDate || taskcard.priorityLevel) && (
             <div className="task-card-indicators">
               {taskcard.description && (
                 <div className="task-indicator description-indicator" title="Есть описание">
@@ -108,6 +115,14 @@ const TaskCard = ({taskcard, projectId, columnId }: Props) => {
                   <i className="task-icon due-date-icon"></i>
                   <span className="due-date-text">{formatDueDate(taskcard.dueDate)}</span>
                 </div>
+              )}
+              
+              {/* Индикатор приоритета - альтернативный вариант */}
+              {(
+              <div className="task-indicator priority-indicator" title={priorityTooltip}>
+                <i className="task-icon priority-icon" style={{ backgroundColor: priorityColor }}></i>
+                <span className="priority-text"style={{ color: priorityColor }}>{priorityLabel}</span>
+              </div>
               )}
             </div>
           )}

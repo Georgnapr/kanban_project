@@ -2,7 +2,8 @@
 import { RootState } from '../../store';
 import { IProject, IColumn, ITask } from '../../../types/entities';
 import { createSelector } from '@reduxjs/toolkit';
-
+import { PriorityLevel } from '../../../types/entities';
+import { getPriorityValue, getTaskPriority } from '../../../utils/priorityCalculator';
 
 const selectAllTasks = (state: RootState) => state.board.tasks;
 
@@ -86,6 +87,11 @@ export const selectFilteredTasks = (state: RootState, projectId: string, columnI
   }).sort((a, b) => {
     // Сортировка в зависимости от выбранного параметра
     switch (filters.sortBy) {
+      case 'priority':
+        // Получаем значение приоритета с учетом типа (авто/ручной)
+        const priorityA = getPriorityValue(a);
+        const priorityB = getPriorityValue(b);
+        return priorityB - priorityA; // Сортировка по убыванию
       case 'newest':
         return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
       case 'oldest':
@@ -109,7 +115,7 @@ export const selectIsFiltersActive = (state: RootState) => {
   return filters.searchQuery !== '' || 
          Object.values(filters.statusFilters).some(value => value) || 
          Object.values(filters.dueDateFilters).some(value => value) || 
-         filters.sortBy !== 'newest';
+         filters.sortBy !== 'newest'; // Это уже учитывает 'priority' как нестандартную сортировку
 };
 
 // Подсчет количества отфильтрованных задач
@@ -135,4 +141,59 @@ export const selectTasksWithDueDateByProject = createSelector(
   [selectAllTasks, (_, projectId: string) => projectId],
   (tasks, projectId) => Object.values(tasks)
     .filter(task => task.projectId === projectId && task.dueDate)
+);
+
+// Селектор для получения задач, отсортированных по приоритету
+export const selectTasksByPriority = createSelector(
+  [selectAllTasks],
+  (tasks) => {
+    // Сортируем задачи по приоритету
+    return [...Object.values(tasks)]
+      .filter(task => !task.completed) // Фильтруем только незавершенные задачи
+      .sort((a, b) => {
+        // Получаем значения приоритета для сортировки
+        const priorityA = getPriorityValue(a);
+        const priorityB = getPriorityValue(b);
+        return priorityB - priorityA; // Сортировка по убыванию
+      });
+  }
+);
+
+// Селектор для получения задач с высоким и критическим приоритетом
+export const selectHighPriorityTasks = createSelector(
+  [selectAllTasks],
+  (tasks) => Object.values(tasks)
+    .filter(task => {
+      if (task.completed) return false;
+      
+      // Получаем текущий уровень приоритета
+      const priority = getTaskPriority(task);
+      
+      // Фильтруем задачи с высоким и критическим приоритетом
+      return priority === PriorityLevel.High || priority === PriorityLevel.Critical;
+    })
+);
+
+// Селектор для получения задач колонки, отсортированных по приоритету
+export const selectTasksByColumnIdSortedByPriority = createSelector(
+  [selectAllTasks, (_, columnId: string) => columnId],
+  (tasks, columnId) => Object.values(tasks)
+    .filter(task => task.columnId === columnId)
+    .sort((a, b) => {
+      // Сравниваем значения приоритета
+      const priorityA = getPriorityValue(a);
+      const priorityB = getPriorityValue(b);
+      return priorityB - priorityA; // Сортировка по убыванию
+    })
+);
+
+// Селектор для получения критических задач проекта
+export const selectCriticalTasksByProject = createSelector(
+  [selectAllTasks, (_, projectId: string) => projectId],
+  (tasks, projectId) => Object.values(tasks)
+    .filter(task => 
+      task.projectId === projectId && 
+      !task.completed &&
+      getTaskPriority(task) === PriorityLevel.Critical
+    )
 );
