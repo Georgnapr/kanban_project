@@ -1,4 +1,4 @@
-// src/components/Filters/FilterDropdown.tsx
+// src/components/UI/Filters/FilterDropdown.tsx
 import React, { useRef, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { 
@@ -9,6 +9,8 @@ import {
   resetFilters
 } from '../../../app/features/board/boardSlice';
 import { selectFilters, selectFilteredTasksCount } from '../../../app/features/board/boardSelectors';
+import SquareCheckbox from '../SquareCheckbox/SquareCheckbox';
+import SearchInput from '../SearchInput/SearchInput';
 import './FilterDropdown.css';
 
 interface FilterDropdownProps {
@@ -42,6 +44,10 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({ projectId, isOpen, onCl
     };
   }, [isOpen, onClose]);
 
+  const handleSearch = (value: string) => {
+    dispatch(setSearchQuery(value));
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -49,12 +55,10 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({ projectId, isOpen, onCl
       <div className="filter-dropdown">
         {/* Поисковая строка */}
         <div className="filter-search-section">
-          <input
-            type="text"
-            placeholder="Поиск задач..."
+          <SearchInput
             value={filters.searchQuery}
-            onChange={(e) => dispatch(setSearchQuery(e.target.value))}
-            className="filter-search-input"
+            onChange={handleSearch}
+            placeholder="Поиск задач..."
           />
         </div>
         
@@ -64,22 +68,18 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({ projectId, isOpen, onCl
         <div className="filter-section">
           <h4 className="filter-section-title">Статус</h4>
           <div className="filter-options">
-            <label className="filter-option">
-              <input
-                type="checkbox"
-                checked={filters.statusFilters.active}
-                onChange={() => dispatch(toggleStatusFilter('active'))}
-              />
-              <span>В процессе</span>
-            </label>
-            <label className="filter-option">
-              <input
-                type="checkbox"
-                checked={filters.statusFilters.completed}
-                onChange={() => dispatch(toggleStatusFilter('completed'))}
-              />
-              <span>Завершенные</span>
-            </label>
+            <SquareCheckbox
+              checked={filters.statusFilters.active}
+              onChange={() => dispatch(toggleStatusFilter('active'))}
+              label="В процессе"
+              id="status-active"
+            />
+            <SquareCheckbox
+              checked={filters.statusFilters.completed}
+              onChange={() => dispatch(toggleStatusFilter('completed'))}
+              label="Завершенные"
+              id="status-completed"
+            />
           </div>
         </div>
         
@@ -89,30 +89,24 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({ projectId, isOpen, onCl
         <div className="filter-section">
           <h4 className="filter-section-title">Дедлайн</h4>
           <div className="filter-options">
-            <label className="filter-option">
-              <input
-                type="checkbox"
-                checked={filters.dueDateFilters.overdue}
-                onChange={() => dispatch(toggleDueDateFilter('overdue'))}
-              />
-              <span>Просроченные</span>
-            </label>
-            <label className="filter-option">
-              <input
-                type="checkbox"
-                checked={filters.dueDateFilters.upcoming}
-                onChange={() => dispatch(toggleDueDateFilter('upcoming'))}
-              />
-              <span>Предстоящие</span>
-            </label>
-            <label className="filter-option">
-              <input
-                type="checkbox"
-                checked={filters.dueDateFilters.noDueDate}
-                onChange={() => dispatch(toggleDueDateFilter('noDueDate'))}
-              />
-              <span>Без срока</span>
-            </label>
+            <SquareCheckbox
+              checked={filters.dueDateFilters.overdue}
+              onChange={() => dispatch(toggleDueDateFilter('overdue'))}
+              label="Просроченные"
+              id="duedate-overdue"
+            />
+            <SquareCheckbox
+              checked={filters.dueDateFilters.upcoming}
+              onChange={() => dispatch(toggleDueDateFilter('upcoming'))}
+              label="Предстоящие"
+              id="duedate-upcoming"
+            />
+            <SquareCheckbox
+              checked={filters.dueDateFilters.noDueDate}
+              onChange={() => dispatch(toggleDueDateFilter('noDueDate'))}
+              label="Без срока"
+              id="duedate-nodate"
+            />
           </div>
         </div>
         

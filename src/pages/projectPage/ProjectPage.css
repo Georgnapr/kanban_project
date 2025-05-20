@@ -1,7 +1,7 @@
 
 /* src/pages/projectPage/ProjectPage.css */
 .project-page {
-  margin-left: 60px; /* По умолчанию с учетом свернутой боковой панели */
+  margin-left: 50px; /* По умолчанию с учетом свернутой боковой панели */
   margin-right: 50px;
   transition: margin-left 0.3s ease; /* Плавный переход для смещения */
   width: calc(100% - 100px); /* По умолчанию для свернутой панели */
@@ -10,7 +10,7 @@
 
 /* Стиль при развернутой боковой панели */
 .project-page.sidebar-expanded {
-  margin-left: 310px;
+  margin-left: 300px;
   width: calc(100% - 350px); /* 300px боковая панель + 50px отступ справа */
 }
 
@@ -37,7 +37,7 @@
   z-index: 5;
 }
 .action-bar-title{
-    margin-left: 50px;
+  margin-left: 50px;
 }
 
 .action-bar-controls {

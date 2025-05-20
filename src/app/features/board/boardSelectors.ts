@@ -1,10 +1,20 @@
 // src/app/features/board/boardSelectors.ts
 import { RootState } from '../../store';
 import { IProject, IColumn, ITask } from '../../../types/entities';
+import { createSelector } from '@reduxjs/toolkit';
+
+
+const selectAllTasks = (state: RootState) => state.board.tasks;
 
 // Селекторы для проектов
-export const selectAllProjects = (state: RootState): IProject[] => 
-  Object.values(state.board.projects);
+// Базовый селектор для проектов
+const selectProjects = (state: RootState) => state.board.projects;
+
+// Мемоизированный селектор для всех проектов
+export const selectAllProjects = createSelector(
+  [selectProjects],
+  (projects) => Object.values(projects)
+);
 
 export const selectProjectById = (state: RootState, projectId: string): IProject | undefined => 
   state.board.projects[projectId];
@@ -114,3 +124,15 @@ export const selectFilteredTasksCount = (state: RootState, projectId: string) =>
   
   return totalFilteredTasks;
 };
+
+export const selectTasksWithDueDate = createSelector(
+  [selectAllTasks], // входные селекторы
+  (tasks) => Object.values(tasks).filter(task => task.dueDate) // функция преобразования
+);
+
+// Мемоизированный селектор для задач с дедлайнами конкретного проекта
+export const selectTasksWithDueDateByProject = createSelector(
+  [selectAllTasks, (_, projectId: string) => projectId],
+  (tasks, projectId) => Object.values(tasks)
+    .filter(task => task.projectId === projectId && task.dueDate)
+);

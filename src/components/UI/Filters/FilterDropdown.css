@@ -106,3 +106,18 @@
   background-color: #8EBCFE;
   color: white;
 }
+
+/* Обновление стилей для лучшей работы с SquareCheckbox */
+.filter-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Удалите или переделайте старые стили filter-option если они конфликтуют */
+.filter-section-title {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #2F5487;
+}

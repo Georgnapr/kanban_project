@@ -1,12 +1,54 @@
 /* src/components/Calendar/TaskCalendar.css */
 .task-calendar-container {
-  padding: 20px;
-  
-  height: calc(100vh - 171px);
+  padding-top: 30px;
+  padding-left: 30px;
+  height: calc(100vh - 170px);
   color: #2F5487;
   background-color: white;
   border-radius: 10px;
   overflow-y: auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Стили для верхней панели календаря */
+.calendar-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 15px;
+  position: relative;
+}
+
+/* Кнопка фильтра */
+.filter-button {
+  background-color: #8EBCFE;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 15px;
+  font-family: 'Montserrat';
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.2s;
+}
+
+.filter-button:hover {
+  background-color: #5795ED;
+}
+
+.filter-active {
+  background-color: #5795ED;
+}
+
+.filter-badge {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background-color: white;
+  border-radius: 50%;
+  margin-left: 8px;
 }
 
 /* Адаптация стилей FullCalendar к дизайну приложения */
@@ -57,7 +99,19 @@
   padding: 8px;
 }
 
-/* Исправление отступов в контейнере */
-.task-calendar-container .fc-view-harness {
-  margin: 10px 0;
+/* Стили для событий календаря */
+.fc-event {
+  border-radius: 4px;
+  font-size: 12px;
+  padding: 2px 4px;
+  margin: 1px 0;
+  cursor: pointer;
+}
+
+.fc-event.task-completed {
+  opacity: 0.8;
+}
+
+.fc-event.task-overdue {
+  font-weight: 500;
 }

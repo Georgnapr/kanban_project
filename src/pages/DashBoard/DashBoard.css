@@ -1,24 +1,32 @@
 /* src/pages/dashBoard/DashBoard.css */
 .dashboard-content {
   transition: margin-left 0.3s ease;
-  margin-left: 60px; /* По умолчанию с учетом свернутой боковой панели */
+  margin-left: 50px; /* По умолчанию с учетом свернутой боковой панели */
+  margin-right: 50px;
   width: calc(100% - 100px); /* По умолчанию для свернутой панели */
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column; /* Добавлено для вертикального размещения элементов */
+  height: calc(100vh - 115px); /* Высота экрана минус header и action-bar */
 }
 
 /* Стиль при развернутой боковой панели */
 .dashboard-content.sidebar-expanded {
-  margin-left: 310px;
+  margin-left: 300px;
   width: calc(100% - 350px); /* 300px боковая панель + 50px отступ справа */
 }
 
 .projects-container {
   display: flex;
   flex-direction: row;
-  margin-top: 30px;
+  padding: 30px 50px 30px 30px;
   flex-wrap: wrap; /* Позволяет элементам переноситься на новую строку */
+  overflow-y: auto; /* Вертикальная прокрутка */
+  height: 100%; /* Занимает всю доступную высоту */
+  box-sizing: border-box; /* Включаем padding в расчет высоты */
+  align-items: flex-start; /* Выравнивание элементов по верхнему краю */
+  gap: 20px; /* Современный способ задать отступы между flex-элементами */
 }
-
 .action-bar {
   display: flex;
   align-items: center;
@@ -32,6 +40,7 @@
   top: 60px; /* Высота header */
   background-color: white;
   z-index: 5;
+  flex-shrink: 0; /* Предотвращаем сжатие при переполнении */
 }
 
 .action-bar-title {
