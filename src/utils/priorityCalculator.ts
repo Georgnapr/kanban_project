@@ -125,10 +125,10 @@ export const getPriorityValue = (task: ITask): number => {
   if (!task.useAutoPriority) {
     // Преобразуем уровень приоритета в числовое значение
     switch (task.priorityLevel) {
-      case PriorityLevel.Critical: return 90;
-      case PriorityLevel.High: return 70;
+      case PriorityLevel.Critical: return 100;
+      case PriorityLevel.High: return 75;
       case PriorityLevel.Medium: return 50;
-      case PriorityLevel.Low: return 30;
+      case PriorityLevel.Low: return 25;
       default: return 0;
     }
   }

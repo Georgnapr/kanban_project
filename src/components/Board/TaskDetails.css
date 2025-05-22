@@ -108,6 +108,7 @@
     color: #2F5487;
     resize: vertical;
     margin-bottom: 8px;
+    font-family: "Montserrat";
   }
   
   /* Стили для секций редактирования */
@@ -242,6 +243,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  font-family: "Montserrat";
 }
 
 .importance-button:hover,
@@ -386,6 +388,7 @@
   font-size: 14px;
   cursor: pointer;
   transition: all 0.2s ease;
+  font-family: "Montserrat";
 }
 
 .priority-button:hover {
